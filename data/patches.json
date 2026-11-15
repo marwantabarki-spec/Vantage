@@ -1,0 +1,145 @@
+[
+  {
+    "slug": "1-6-0-arsenal-tactique",
+    "version": "1.6.0",
+    "title": "Arsenal tactique",
+    "date": "2026-11-16",
+    "image": "assets/img/vx9-crimson.jpg",
+    "summary": "Lancers visés avec trajectoire, 6 nouveaux équipements, la Buy Station refaite, un menu pause en partie et une navigation manette bien plus simple.",
+    "discord_message": "",
+    "highlights": ["Trajectoire de lancer + cuisson", "6 nouveaux équipements", "Buy Station V2", "Menu pause", "Manette"],
+    "sections": [
+      {
+        "title": "Équipement",
+        "items": [
+          {"tag": "new", "text": "Lancer visé : maintiens la touche pour voir la trajectoire et le point d'impact. Vise pendant le lancer pour un lancer court."},
+          {"tag": "new", "text": "Cuisson des grenades : le minuteur s'affiche à l'écran, la grenade part toute seule juste avant d'exploser."},
+          {"tag": "new", "text": "Mine de proximité : s'arme en 1,5 s et explose quand un ennemi approche (2 maximum)."},
+          {"tag": "new", "text": "Charge incendiaire : éclate à l'impact en une zone de feu pendant 7 secondes."},
+          {"tag": "new", "text": "Couteau de lancer : vole presque en ligne droite, élimine en un coup à la tête."},
+          {"tag": "new", "text": "Stimulant : vie au maximum et petite accélération, instantané."},
+          {"tag": "new", "text": "Impulsion radar : révèle les ennemis proches à ton escouade pendant 4 secondes."},
+          {"tag": "new", "text": "Grenade commotion : ralentit et secoue tous ceux pris dans l'explosion."},
+          {"tag": "update", "text": "Les nouveaux équipements sont disponibles dans les classes personnalisées et au sol."},
+          {"tag": "update", "text": "Nouvelles cases d'équipement dans le HUD : icône, nombre restant et touche."}
+        ]
+      },
+      {
+        "title": "Buy Station",
+        "items": [
+          {"tag": "new", "text": "Interface entièrement refaite : onglets Escouade, Ravitaillement, Létal, Tactique et Soutien."},
+          {"tag": "new", "text": "Fiche détaillée de chaque objet avec prix, description et quantité déjà possédée."},
+          {"tag": "update", "text": "Tous les nouveaux équipements peuvent s'acheter."},
+          {"tag": "update", "text": "Manette : L1/R1 pour les onglets, X pour acheter, B pour fermer."}
+        ]
+      },
+      {
+        "title": "Menu pause & paramètres",
+        "items": [
+          {"tag": "new", "text": "Menu pause en partie (P ou MENU) : reprendre, réglages rapides, tous les paramètres, quitter la partie."},
+          {"tag": "new", "text": "Réglages rapides appliqués tout de suite : sensibilité, vitesse de visée manette, champ de vision, volume, graphismes."},
+          {"tag": "new", "text": "Le panneau complet des paramètres s'ouvre maintenant aussi en partie."},
+          {"tag": "update", "text": "Quitter la partie demande une confirmation pour éviter les erreurs."}
+        ]
+      },
+      {
+        "title": "Manette",
+        "items": [
+          {"tag": "update", "text": "Paramètres : L1/R1 changent de catégorie, la croix ◄ ► change directement la valeur sélectionnée."},
+          {"tag": "update", "text": "Chaque panneau sélectionne automatiquement son premier bouton à l'ouverture."},
+          {"tag": "update", "text": "Classes : la liste de choix garde la sélection et se ferme avec B."},
+          {"tag": "update", "text": "Écrans de résultats et d'élimination directement utilisables à la manette."}
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "1-5-3-matchmaking-groupes",
+    "version": "1.5.3",
+    "title": "Matchmaking & groupes",
+    "date": "2026-11-12",
+    "image": "assets/img/loadout.jpg",
+    "summary": "Matchmaking entre serveurs plus fiable, groupes qui restent ensemble et le chef de groupe qui décide de la suite.",
+    "discord_message": "",
+    "highlights": ["Matchmaking inter-serveurs", "Le chef décide", "Annulation fiable"],
+    "sections": [
+      {
+        "title": "Matchmaking",
+        "items": [
+          {"tag": "update", "text": "Les joueurs de différents serveurs se retrouvent mieux dans la même partie."},
+          {"tag": "update", "text": "Compteur de joueurs en recherche affiché pendant l'attente."},
+          {"tag": "fix", "text": "Annuler la recherche ne lance plus une partie par erreur."},
+          {"tag": "fix", "text": "Les inconnus ne sont plus mélangés dans ton escouade."}
+        ]
+      },
+      {
+        "title": "Groupes",
+        "items": [
+          {"tag": "new", "text": "Le chef du groupe décide : rejouer ou retourner au menu, tout le groupe suit."},
+          {"tag": "new", "text": "Les membres peuvent quitter le groupe à la fin d'une partie."},
+          {"tag": "fix", "text": "Un membre du groupe n'est plus laissé de côté au lancement d'une recherche."}
+        ]
+      },
+      {
+        "title": "Corrections",
+        "items": [
+          {"tag": "fix", "text": "Tu n'es plus renvoyé au menu en pleine partie."}
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "1-5-2-outbreak",
+    "version": "1.5.2",
+    "title": "Outbreak : l'arrivée",
+    "date": "2026-11-08",
+    "image": "assets/img/loadout.jpg",
+    "summary": "Cinématique d'arrivée en bateau pour le mode zombies, porte blindée, et plusieurs corrections importantes sur la carte.",
+    "discord_message": "",
+    "highlights": ["Cinématique d'arrivée", "Porte blindée", "Zombies bloqués corrigés"],
+    "sections": [
+      {
+        "title": "Mode zombies",
+        "items": [
+          {"tag": "new", "text": "Cinématique d'arrivée : l'escouade débarque du bateau et rejoint le hall."},
+          {"tag": "new", "text": "Porte blindée à l'entrée : elle se ferme quand tout le monde est entré."},
+          {"tag": "fix", "text": "Les zombies bloqués à l'extérieur reviennent dans la zone de jeu (fini les « il reste 3 zombies »)."},
+          {"tag": "fix", "text": "Toit ajouté sur la carte : plus moyen de sortir par le trou."},
+          {"tag": "fix", "text": "Le courant principal rallume bien toutes les lumières."}
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "1-5-1-performances",
+    "version": "1.5.1",
+    "title": "Performances",
+    "date": "2026-11-04",
+    "image": "assets/img/loadout.jpg",
+    "summary": "Grosse passe d'optimisation : plus d'images par seconde sur les cartes et une physique deux fois plus légère.",
+    "discord_message": "",
+    "highlights": ["+FPS sur les cartes", "Physique allégée", "Traductions"],
+    "sections": [
+      {
+        "title": "Performances",
+        "items": [
+          {"tag": "perf", "text": "Cartes optimisées (vitres, ombres, collisions, lumières) : meilleur taux d'images par seconde."},
+          {"tag": "perf", "text": "Équipement des opérateurs regroupé : le temps de physique passe d'environ 6 ms à 3,5 ms."},
+          {"tag": "perf", "text": "Les textes de l'interface ne sont plus réécrits en boucle."}
+        ]
+      },
+      {
+        "title": "Corrections",
+        "items": [
+          {"tag": "fix", "text": "Battle royale et Résurgence : la cinématique de début se lance et tu n'es plus invincible après l'atterrissage."}
+        ]
+      },
+      {
+        "title": "Langues",
+        "items": [
+          {"tag": "update", "text": "Traduction française complétée pour les nouveaux écrans."}
+        ]
+      }
+    ]
+  }
+]

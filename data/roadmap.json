@@ -1,0 +1,43 @@
+{
+  "note": "La roadmap donne une direction, pas des dates promises. Les éléments peuvent changer selon vos retours.",
+  "columns": [
+    {
+      "id": "done",
+      "title": "Sorti",
+      "items": [
+        {"title": "Arsenal tactique", "text": "Lancers visés, 6 nouveaux équipements, Buy Station V2.", "tag": "1.6.0"},
+        {"title": "Menu pause en partie", "text": "Réglages rapides et paramètres complets en partie.", "tag": "1.6.0"},
+        {"title": "Matchmaking inter-serveurs", "text": "Groupes qui restent ensemble, le chef décide.", "tag": "1.5.3"},
+        {"title": "Outbreak : l'arrivée", "text": "Cinématique, porte blindée, corrections de carte.", "tag": "1.5.2"},
+        {"title": "Passe de performances", "text": "Plus de FPS, physique allégée.", "tag": "1.5.1"}
+      ]
+    },
+    {
+      "id": "progress",
+      "title": "En développement",
+      "items": [
+        {"title": "Camos et skins d'armes", "text": "Nouveaux motifs animés dans la lignée de Crimson.", "tag": "Saison 2"},
+        {"title": "Navigation manette", "text": "Suite des améliorations sur tous les menus.", "tag": "Continu"},
+        {"title": "Équilibrage des équipements", "text": "Ajustements selon vos retours sur la 1.6.0.", "tag": "Prochain patch"}
+      ]
+    },
+    {
+      "id": "planned",
+      "title": "Prévu",
+      "items": [
+        {"title": "Nouvelle carte", "text": "Une zone de combat inédite pour le battle royale.", "tag": "Saison 2"},
+        {"title": "Nouvelles armes", "text": "De nouvelles armes avec leurs accessoires.", "tag": "Saison 2"},
+        {"title": "Passe de combat Saison 2", "text": "Nouveaux paliers, opérateurs et récompenses.", "tag": "Saison 2"}
+      ]
+    },
+    {
+      "id": "ideas",
+      "title": "À l'étude",
+      "items": [
+        {"title": "Clans", "text": "Créer un clan, un tag et un classement de clans.", "tag": "Idée"},
+        {"title": "Mode entraînement amélioré", "text": "Plus de cibles et de scénarios au stand de tir.", "tag": "Idée"},
+        {"title": "Événements limités", "text": "Modes de jeu temporaires le week-end.", "tag": "Idée"}
+      ]
+    }
+  ]
+}
