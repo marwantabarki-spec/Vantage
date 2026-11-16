@@ -10,16 +10,5 @@
     "link": "",
     "discord_message": "",
     "gallery": []
-  },
-  {
-    "id": "crimson",
-    "title": "Camo CRIMSON",
-    "date": "2026-11-15",
-    "tag": "Boutique",
-    "pinned": false,
-    "text": "Des veines incandescentes sur la VX-9 VIPER : le camo CRIMSON est disponible.",
-    "image": "assets/img/vx9-crimson.jpg",
-    "link": "",
-    "discord_message": ""
   }
 ]
