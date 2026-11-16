@@ -1,0 +1,24 @@
+[
+  {
+    "id": "bienvenue-site",
+    "title": "Le site officiel de VANTAGE est en ligne",
+    "date": "2026-11-16",
+    "tag": "Communauté",
+    "pinned": true,
+    "text": "Notes de patch, roadmap et état des serveurs en direct : tout est maintenant au même endroit. Rejoins le Discord pour réagir aux annonces.",
+    "image": "assets/img/loadout.jpg",
+    "link": "",
+    "discord_message": ""
+  },
+  {
+    "id": "crimson",
+    "title": "Camo CRIMSON",
+    "date": "2026-11-15",
+    "tag": "Boutique",
+    "pinned": false,
+    "text": "Des veines incandescentes sur la VX-9 VIPER : le camo CRIMSON est disponible.",
+    "image": "assets/img/vx9-crimson.jpg",
+    "link": "",
+    "discord_message": ""
+  }
+]

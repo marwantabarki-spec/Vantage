@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>VANTAGE · Admin</title>
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@500;600;700;800&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="stylesheet" href="../assets/admin.css">
+</head>
+<body class="adm">
+<header class="top">
+  <div class="wrap top-in">
+    <a class="brand" href="../"><span class="mark"></span><span class="bname">VANTAGE</span></a>
+    <span class="adm-tag">ADMIN</span>
+    <nav class="nav adm-tabs" role="tablist">
+      <button data-tab="news" class="on">Annonces</button>
+      <button data-tab="patches">Patchs</button>
+      <button data-tab="roadmap">Roadmap</button>
+      <button data-tab="site">Statut &amp; site</button>
+      <button data-tab="keys">Connexion</button>
+    </nav>
+    <span class="adm-sync" id="sync">Hors ligne</span>
+  </div>
+</header>
+
+<main class="wrap adm-main">
+  <!-- LOGIN -->
+  <section id="tab-keys" class="tab">
+    <div class="adm-card">
+      <div class="kicker"><span class="num">01</span>Connexion</div>
+      <h2>Accès administrateur</h2>
+      <p class="hint">Tes clés restent <b>uniquement dans ce navigateur</b> : elles ne sont jamais écrites sur le site ni sur GitHub. Sans clé, cette page ne peut rien modifier.</p>
+      <label>Dépôt GitHub<input id="k-repo" placeholder="marwantabarki-spec/Vantage"></label>
+      <label>Jeton GitHub (fine-grained, accès Contents : Read and write)<input id="k-gh" type="password" placeholder="github_pat_…" autocomplete="off"></label>
+      <label>Webhook Discord (salon d'annonces) — facultatif<input id="k-wh" type="password" placeholder="https://discord.com/api/webhooks/…" autocomplete="off"></label>
+      <label>Clé API OpenAI pour générer des images — facultatif<input id="k-ai" type="password" placeholder="sk-…" autocomplete="off"></label>
+      <div class="row"><button class="btn btn-primary" id="k-save">Se connecter</button><button class="btn btn-ghost" id="k-clear">Tout effacer de ce navigateur</button></div>
+      <details class="help"><summary>Comment obtenir ces clés ?</summary>
+        <ol>
+          <li><b>Jeton GitHub</b> : GitHub → photo de profil → Settings → Developer settings → Personal access tokens → <b>Fine-grained tokens</b> → Generate new token. Repository access : <i>Only select repositories</i> → <b>Vantage</b>. Permissions → Repository permissions → <b>Contents : Read and write</b>. Copie le jeton (il commence par <code>github_pat_</code>).</li>
+          <li><b>Webhook Discord</b> : sur ton serveur, paramètres du salon d'annonces → Intégrations → Webhooks → Nouveau webhook → Copier l'URL.</li>
+          <li><b>Clé OpenAI</b> : platform.openai.com → API keys → Create new secret key. ⚠ L'abonnement ChatGPT (Go, Plus…) ne donne pas accès à l'API : il faut ajouter quelques dollars de crédit dans Billing sur platform.openai.com. Une image coûte environ 0,04 à 0,07 $.</li>
+        </ol>
+      </details>
+    </div>
+  </section>
+
+  <!-- NEWS -->
+  <section id="tab-news" class="tab on">
+    <div class="adm-split">
+      <aside class="adm-list"><div class="adm-lh"><b>Annonces</b><button class="btn btn-primary sm" id="news-new">+ Nouvelle</button></div><div id="news-list"></div></aside>
+      <div class="adm-edit" id="news-edit"><div class="empty">Choisis une annonce ou crée-en une.</div></div>
+    </div>
+  </section>
+
+  <!-- PATCHES -->
+  <section id="tab-patches" class="tab">
+    <div class="adm-split">
+      <aside class="adm-list"><div class="adm-lh"><b>Notes de patch</b><button class="btn btn-primary sm" id="patch-new">+ Nouveau</button></div><div id="patch-list"></div></aside>
+      <div class="adm-edit" id="patch-edit"><div class="empty">Choisis un patch ou crée-en un.</div></div>
+    </div>
+  </section>
+
+  <!-- ROADMAP -->
+  <section id="tab-roadmap" class="tab">
+    <div class="adm-card wide">
+      <div class="adm-lh"><div><div class="kicker"><span class="num">//</span>Roadmap</div><h2>Tableau</h2></div><button class="btn btn-primary" id="road-save">Enregistrer et publier</button></div>
+      <label>Note en haut de la page<input id="road-note"></label>
+      <div class="adm-board" id="road-board"></div>
+    </div>
+  </section>
+
+  <!-- SITE -->
+  <section id="tab-site" class="tab">
+    <div class="adm-card wide">
+      <div class="adm-lh"><div><div class="kicker"><span class="num">//</span>Site</div><h2>Statut &amp; réglages</h2></div><button class="btn btn-primary" id="site-save">Enregistrer et publier</button></div>
+      <div class="grid2">
+        <label>État affiché<select id="s-mode"><option value="online">En ligne (normal)</option><option value="degraded">Perturbations</option><option value="maintenance">Maintenance</option></select></label>
+        <label>Message d'état (bandeau en haut du site)<input id="s-msg" placeholder="Ex. : Redémarrage des serveurs à 18 h pour la mise à jour 1.6.1"></label>
+      </div>
+      <label>Bandeau défilant (une ligne par message)<textarea id="s-ticker" rows="4"></textarea></label>
+      <div class="grid2">
+        <label>Lien Discord<input id="s-discord"></label>
+        <label>Lien du jeu Roblox<input id="s-roblox"></label>
+      </div>
+      <p class="hint">Le nombre de joueurs et les serveurs sont relevés automatiquement sur Roblox toutes les ~10 minutes, et en direct dans le navigateur quand c'est possible.</p>
+    </div>
+  </section>
+</main>
+
+<!-- image picker -->
+<dialog id="imgdlg" class="adm-dlg">
+  <form method="dialog" class="dlg-in">
+    <div class="adm-lh"><b>Image de présentation</b><button class="btn btn-ghost sm" value="cancel">Fermer</button></div>
+    <div class="dlg-tabs"><button type="button" data-it="lib" class="on">Bibliothèque</button><button type="button" data-it="up">Importer</button><button type="button" data-it="ai">Générer avec l'IA</button></div>
+    <div class="dlg-p on" data-ip="lib"><div class="imggrid" id="img-lib"><div class="empty">Chargement…</div></div></div>
+    <div class="dlg-p" data-ip="up">
+      <label class="drop" id="drop"><input type="file" id="img-file" accept="image/*" hidden><b>Glisse une image ici</b><span>ou clique pour choisir un fichier (PNG, JPG, WEBP). Elle est redimensionnée en 1600 px et ajoutée au site.</span></label>
+    </div>
+    <div class="dlg-p" data-ip="ai">
+      <div class="grid2">
+        <label>Style<select id="ai-style">
+          <option value="patch">Affiche de notes de patch</option>
+          <option value="roadmap">Visuel de roadmap / saison</option>
+          <option value="event">Annonce d'événement</option>
+          <option value="free">Libre (seulement ma description)</option>
+        </select></label>
+        <label>Qualité<select id="ai-q"><option value="medium">Normale (~0,04 $)</option><option value="high">Haute (~0,17 $)</option><option value="low">Brouillon (~0,01 $)</option></select></label>
+      </div>
+      <label>Description<textarea id="ai-prompt" rows="4" placeholder="Ex. : une mitraillette futuriste rouge et orange avec des veines de lave, posée sur un sol en métal sombre, lumière orange dramatique"></textarea></label>
+      <div class="row"><button type="button" class="btn btn-primary" id="ai-go">Générer</button><span class="hint" id="ai-state"></span></div>
+      <div id="ai-out" class="ai-out"></div>
+    </div>
+  </form>
+</dialog>
+
+<div class="toast" role="status" aria-live="polite"></div>
+<script src="../assets/admin.js"></script>
+</body>
+</html>

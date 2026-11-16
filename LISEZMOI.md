@@ -1,30 +1,31 @@
-# Site VANTAGE — notes de patch & roadmap
+# Site VANTAGE — annonces, notes de patch, roadmap, serveurs en direct, admin
 
-## 1. Mettre en ligne (GitHub Pages, gratuit)
-1. Crée un dépôt public sur GitHub, par exemple `vantage` (exactement ce nom).
-2. Envoie tout le contenu de ce dossier dans le dépôt (bouton **Add file → Upload files**).
-3. Dans le dépôt : **Settings → Pages → Source : Deploy from a branch → main / (root)**.
-4. Ton site sera à l'adresse `https://marwantabarki-spec.github.io/vantage/`.
+## Mise en place (une seule fois)
+1. Envoie tout le contenu de ce dossier dans le dépôt GitHub **Vantage** (Add file → Upload files),
+   y compris le dossier caché `.github` (sur Mac : Cmd + Maj + . pour afficher les fichiers cachés).
+2. Dépôt → **Settings → Pages → Source : GitHub Actions** (au lieu de « Deploy from a branch »).
+3. Onglet **Actions** : le workflow « Site VANTAGE » se lance. Coche verte = site en ligne :
+   https://marwantabarki-spec.github.io/Vantage/
 
-## 2. Régler tes liens (`data/site.json`)
-- `base_url` : l'adresse exacte du site (étape 1.4). **Obligatoire** pour que Discord affiche l'aperçu.
-- `discord_invite` : ton lien d'invitation Discord.
-- `roblox_url` : la page Roblox du jeu.
+Ensuite, le site se met à jour tout seul :
+- à chaque modification faite depuis l'admin (~1 min) ;
+- toutes les ~10 min pour le nombre de joueurs et les serveurs (GitHub peut parfois prendre un peu plus).
 
-Puis relance la génération (voir 4) et renvoie les fichiers sur GitHub.
+## Admin : https://marwantabarki-spec.github.io/Vantage/admin/
+Onglet **Connexion** :
+- **Jeton GitHub** (obligatoire) : GitHub → Settings → Developer settings → Personal access tokens →
+  Fine-grained tokens → Generate new token → Only select repositories : Vantage →
+  Repository permissions → Contents : Read and write.
+- **Webhook Discord** (facultatif) : paramètres du salon d'annonces → Intégrations → Webhooks → Nouveau → Copier l'URL.
+  Bouton « Publier sur Discord » sur chaque annonce / patch.
+- **Clé OpenAI** (facultatif) : platform.openai.com → API keys. L'abonnement ChatGPT ne suffit pas :
+  il faut du crédit API (Billing). Sert au bouton « Générer avec l'IA » des images.
 
-## 3. Discord
-- **Aperçu** : colle le lien d'une note de patch (bouton « Copier le lien pour Discord ») dans un salon.
-  Discord affiche une carte avec le titre, le résumé, l'image et la couleur orange.
-- **Bouton vers l'annonce** : publie l'annonce dans ton salon Discord, fais clic droit sur le message →
-  **Copier le lien du message**, et colle-le dans `discord_message` du patch (`data/patches.json`).
-  Le bouton devient « Voir l'annonce sur Discord ». Vide = il ouvre ton serveur.
+Les clés restent dans ton navigateur uniquement. Ne les partage jamais et ne les mets pas dans les fichiers du site.
 
-## 4. Ajouter un patch
-1. Dans `data/patches.json`, copie un bloc et change `slug` (sans espaces ni accents), `version`, `title`,
-   `date` (AAAA-MM-JJ), `summary`, `image`, `highlights` et les `sections`.
-   Tags possibles : `new`, `update`, `fix`, `perf`, `balance`.
-2. Ouvre le Terminal dans ce dossier et lance : `python3 build.py`
-3. Envoie les fichiers modifiés sur GitHub.
-
-La roadmap se modifie dans `data/roadmap.json` de la même façon.
+## Ce que tu peux faire dans l'admin
+- **Annonces** : créer, modifier, épingler, supprimer, choisir une image, publier sur Discord.
+- **Patchs** : créer une note de patch (sections + lignes Nouveau / Amélioration / Correction…), publier sur Discord.
+- **Roadmap** : ajouter, modifier, déplacer entre colonnes, réordonner.
+- **Statut & site** : mode Maintenance / Perturbations avec message (bandeau en haut du site), textes du bandeau défilant, liens.
+- **Images** : bibliothèque, import de tes propres images, ou génération par IA.

@@ -1,9 +1,22 @@
 {
   "name": "VANTAGE",
   "tagline": "Battle royale tactique sur Roblox",
-  "base_url": "https://marwantabarki-spec.github.io/vantage",
+  "base_url": "https://marwantabarki-spec.github.io/Vantage",
   "discord_invite": "https://discord.gg/rN2DHhAdBp",
   "roblox_url": "https://www.roblox.com/games/110689622872143/VANTAGE",
   "default_image": "assets/img/loadout.jpg",
-  "accent": "#ff6a1a"
+  "accent": "#ff6a1a",
+  "place_id": 110689622872143,
+  "universe_id": 10750574018,
+  "repo": "marwantabarki-spec/Vantage",
+  "status": {
+    "mode": "online",
+    "message": ""
+  },
+  "ticker": [
+    "Saison 1.5 en cours",
+    "Nouveau : Arsenal tactique (v1.6.0)",
+    "Camo CRIMSON disponible",
+    "Rejoins le Discord pour les annonces"
+  ]
 }

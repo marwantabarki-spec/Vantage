@@ -10,61 +10,76 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="VANTAGE · v1.5.3 — Matchmaking &amp; groupes">
 <meta property="og:description" content="Matchmaking entre serveurs plus fiable, groupes qui restent ensemble et le chef de groupe qui décide de la suite.">
-<meta property="og:url" content="https://marwantabarki-spec.github.io/vantage/patch-notes/1-5-3-matchmaking-groupes/">
-<meta property="og:image" content="https://marwantabarki-spec.github.io/vantage/assets/img/loadout.jpg">
+<meta property="og:url" content="https://marwantabarki-spec.github.io/Vantage/patch-notes/1-5-3-matchmaking-groupes/">
+<meta property="og:image" content="https://marwantabarki-spec.github.io/Vantage/assets/img/loadout.jpg">
 <meta property="og:image:width" content="1600">
 <meta property="og:image:height" content="900">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="VANTAGE · v1.5.3 — Matchmaking &amp; groupes">
 <meta name="twitter:description" content="Matchmaking entre serveurs plus fiable, groupes qui restent ensemble et le chef de groupe qui décide de la suite.">
-<meta name="twitter:image" content="https://marwantabarki-spec.github.io/vantage/assets/img/loadout.jpg">
+<meta name="twitter:image" content="https://marwantabarki-spec.github.io/Vantage/assets/img/loadout.jpg">
+<link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@500;600;700;800&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../assets/style.css">
 </head>
-<body>
+<body data-root="../../" data-universe="10750574018" data-place="110689622872143" data-mode="online">
+<div class="grain" aria-hidden="true"></div>
 <header class="top">
   <div class="wrap top-in">
-    <a class="brand" href="../../"><span class="mark"></span>VANTAGE</a>
-    <button class="burger" aria-label="Menu" aria-expanded="false">☰</button>
-    <nav class="nav"><a href="../../" class="">Accueil</a><a href="../../patch-notes/" class="on">Notes de patch</a><a href="../../roadmap/" class="">Roadmap</a><a class="btn btn-discord sm" href="https://discord.gg/rN2DHhAdBp" target="_blank" rel="noopener">Discord</a></nav>
+    <a class="brand" href="../../"><span class="mark"></span><span class="bname">VANTAGE</span></a>
+    <nav class="nav"><a href="../../" class="">Accueil</a><a href="../../annonces/" class="">Annonces</a><a href="../../patch-notes/" class="on">Patchs</a><a href="../../roadmap/" class="">Roadmap</a><a href="../../status/" class="">Serveurs</a></nav>
+    <a class="livepill" href="../../status/" title="État des serveurs"><span class="ldot"></span><span data-stat="playing-short">—</span><em>en jeu</em></a>
+    <a class="btn btn-discord sm hide-m" href="https://discord.gg/rN2DHhAdBp" target="_blank" rel="noopener"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.3 4.4A19.6 19.6 0 0 0 15.4 3l-.6 1.3a18 18 0 0 0-5.6 0L8.6 3a19.6 19.6 0 0 0-4.9 1.4C.6 9-.2 13.5.2 18a19.8 19.8 0 0 0 6 3l1.3-2.1c-.7-.3-1.4-.6-2-1l.5-.4a14 14 0 0 0 12 0l.5.4c-.6.4-1.3.7-2 1l1.3 2.1a19.7 19.7 0 0 0 6-3c.5-5.2-.8-9.6-3.5-13.6ZM8.5 15.3c-1.2 0-2.1-1.1-2.1-2.4s.9-2.4 2.1-2.4 2.2 1.1 2.1 2.4c0 1.3-.9 2.4-2.1 2.4Zm7 0c-1.2 0-2.1-1.1-2.1-2.4s.9-2.4 2.1-2.4 2.2 1.1 2.1 2.4c0 1.3-.9 2.4-2.1 2.4Z"/></svg>Discord</a>
+    <button class="burger" aria-label="Menu" aria-expanded="false"><span></span><span></span></button>
   </div>
+  <div class="ticker" aria-hidden="true"><div class="tk"><span>Saison 1.5 en cours</span><i>◆</i><span>Nouveau : Arsenal tactique (v1.6.0)</span><i>◆</i><span>Camo CRIMSON disponible</span><i>◆</i><span>Rejoins le Discord pour les annonces</span><i>◆</i><span>Saison 1.5 en cours</span><i>◆</i><span>Nouveau : Arsenal tactique (v1.6.0)</span><i>◆</i><span>Camo CRIMSON disponible</span><i>◆</i><span>Rejoins le Discord pour les annonces</span><i>◆</i></div></div>
 </header>
+
 <main>
 
 <section class="phero"><div class="bgimg" style="background-image:url('../../assets/img/loadout.jpg')"></div>
   <div class="wrap">
     <a class="crumb" href="../../patch-notes/">← Toutes les notes de patch</a>
-    <div class="kicker">Notes de patch · v1.5.3 · 12 novembre 2026</div>
+    <div class="kicker"><span class="badge">v1.5.3</span>Notes de patch · 12 novembre 2026</div>
     <h1>Matchmaking &amp; groupes</h1>
     <p class="lead">Matchmaking entre serveurs plus fiable, groupes qui restent ensemble et le chef de groupe qui décide de la suite.</p>
+    <div class="pfacts"><div><b>8</b><span>changements</span></div><div><b>3</b><span>sections</span></div><div><b class="t-up">2</b><span>amélioration</span></div><div><b class="t-fix">4</b><span>correction</span></div><div><b class="t-new">2</b><span>nouveau</span></div></div>
     <div class="share">
-      <a class="btn btn-discord" href="https://discord.gg/rN2DHhAdBp" target="_blank" rel="noopener"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.3 4.4A19.6 19.6 0 0 0 15.4 3l-.6 1.3a18 18 0 0 0-5.6 0L8.6 3a19.6 19.6 0 0 0-4.9 1.4C.6 9 -.2 13.5.2 18a19.8 19.8 0 0 0 6 3l1.3-2.1c-.7-.3-1.4-.6-2-1l.5-.4a14 14 0 0 0 12 0l.5.4c-.6.4-1.3.7-2 1l1.3 2.1a19.7 19.7 0 0 0 6-3c.5-5.2-.8-9.6-3.5-13.6ZM8.5 15.3c-1.2 0-2.1-1.1-2.1-2.4s.9-2.4 2.1-2.4 2.2 1.1 2.1 2.4c0 1.3-.9 2.4-2.1 2.4Zm7 0c-1.2 0-2.1-1.1-2.1-2.4s.9-2.4 2.1-2.4 2.2 1.1 2.1 2.4c0 1.3-.9 2.4-2.1 2.4Z"/></svg>Discuter sur Discord</a>
-      <button class="btn btn-ghost js-copy" data-url="https://marwantabarki-spec.github.io/vantage/patch-notes/1-5-3-matchmaking-groupes/">Copier le lien pour Discord</button>
+      <a class="btn btn-discord" href="https://discord.gg/rN2DHhAdBp" target="_blank" rel="noopener"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.3 4.4A19.6 19.6 0 0 0 15.4 3l-.6 1.3a18 18 0 0 0-5.6 0L8.6 3a19.6 19.6 0 0 0-4.9 1.4C.6 9-.2 13.5.2 18a19.8 19.8 0 0 0 6 3l1.3-2.1c-.7-.3-1.4-.6-2-1l.5-.4a14 14 0 0 0 12 0l.5.4c-.6.4-1.3.7-2 1l1.3 2.1a19.7 19.7 0 0 0 6-3c.5-5.2-.8-9.6-3.5-13.6ZM8.5 15.3c-1.2 0-2.1-1.1-2.1-2.4s.9-2.4 2.1-2.4 2.2 1.1 2.1 2.4c0 1.3-.9 2.4-2.1 2.4Zm7 0c-1.2 0-2.1-1.1-2.1-2.4s.9-2.4 2.1-2.4 2.2 1.1 2.1 2.4c0 1.3-.9 2.4-2.1 2.4Z"/></svg>Discuter sur Discord</a>
+      <button class="btn btn-ghost js-copy" data-url="https://marwantabarki-spec.github.io/Vantage/patch-notes/1-5-3-matchmaking-groupes/"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg>Copier le lien pour Discord</button>
     </div>
   </div>
 </section>
 <div class="wrap pgrid">
   <aside class="side">
     <div class="box"><div class="bt">À retenir</div><ul class="hl"><li>Matchmaking inter-serveurs</li><li>Le chef décide</li><li>Annulation fiable</li></ul></div>
-    <div class="box"><div class="bt">Sommaire</div><nav class="toc"><a href="#matchmaking">Matchmaking</a><a href="#groupes">Groupes</a><a href="#corrections">Corrections</a></nav></div>
+    <div class="box"><div class="bt">Sommaire</div><nav class="toc"><a href="#matchmaking">Matchmaking<em>4</em></a><a href="#groupes">Groupes<em>3</em></a><a href="#corrections">Corrections<em>1</em></a></nav></div>
   </aside>
   <article class="content">
-    <div class="filters" role="toolbar" aria-label="Filtrer"><button class="f on" data-f="all">Tout</button><button class="f" data-f="update">Amélioration</button><button class="f" data-f="fix">Correction</button><button class="f" data-f="new">Nouveau</button></div>
-    <section class="nsec" id="matchmaking"><h2>Matchmaking</h2><ul class="notes"><li data-tag="update"><span class="tag t-up">AMÉLIORATION</span><span>Les joueurs de différents serveurs se retrouvent mieux dans la même partie.</span></li><li data-tag="update"><span class="tag t-up">AMÉLIORATION</span><span>Compteur de joueurs en recherche affiché pendant l&#x27;attente.</span></li><li data-tag="fix"><span class="tag t-fix">CORRECTION</span><span>Annuler la recherche ne lance plus une partie par erreur.</span></li><li data-tag="fix"><span class="tag t-fix">CORRECTION</span><span>Les inconnus ne sont plus mélangés dans ton escouade.</span></li></ul></section><section class="nsec" id="groupes"><h2>Groupes</h2><ul class="notes"><li data-tag="new"><span class="tag t-new">NOUVEAU</span><span>Le chef du groupe décide : rejouer ou retourner au menu, tout le groupe suit.</span></li><li data-tag="new"><span class="tag t-new">NOUVEAU</span><span>Les membres peuvent quitter le groupe à la fin d&#x27;une partie.</span></li><li data-tag="fix"><span class="tag t-fix">CORRECTION</span><span>Un membre du groupe n&#x27;est plus laissé de côté au lancement d&#x27;une recherche.</span></li></ul></section><section class="nsec" id="corrections"><h2>Corrections</h2><ul class="notes"><li data-tag="fix"><span class="tag t-fix">CORRECTION</span><span>Tu n&#x27;es plus renvoyé au menu en pleine partie.</span></li></ul></section>
-    <div class="share">
-      <a class="btn btn-discord" href="https://discord.gg/rN2DHhAdBp" target="_blank" rel="noopener"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.3 4.4A19.6 19.6 0 0 0 15.4 3l-.6 1.3a18 18 0 0 0-5.6 0L8.6 3a19.6 19.6 0 0 0-4.9 1.4C.6 9 -.2 13.5.2 18a19.8 19.8 0 0 0 6 3l1.3-2.1c-.7-.3-1.4-.6-2-1l.5-.4a14 14 0 0 0 12 0l.5.4c-.6.4-1.3.7-2 1l1.3 2.1a19.7 19.7 0 0 0 6-3c.5-5.2-.8-9.6-3.5-13.6ZM8.5 15.3c-1.2 0-2.1-1.1-2.1-2.4s.9-2.4 2.1-2.4 2.2 1.1 2.1 2.4c0 1.3-.9 2.4-2.1 2.4Zm7 0c-1.2 0-2.1-1.1-2.1-2.4s.9-2.4 2.1-2.4 2.2 1.1 2.1 2.4c0 1.3-.9 2.4-2.1 2.4Z"/></svg>Discuter sur Discord</a>
-      <button class="btn btn-ghost js-copy" data-url="https://marwantabarki-spec.github.io/vantage/patch-notes/1-5-3-matchmaking-groupes/">Copier le lien pour Discord</button>
-    </div>
-    <div class="pager"><a href="../../patch-notes/1-5-2-outbreak/">← v1.5.2 · Outbreak : l&#x27;arrivée</a><a href="../../patch-notes/1-6-0-arsenal-tactique/">v1.6.0 · Arsenal tactique →</a></div>
+    <div class="filters" role="toolbar" aria-label="Filtrer"><button class="f on" data-f="all">Tout</button><button class="f" data-f="update"><i class="t-up"></i>Amélioration</button><button class="f" data-f="fix"><i class="t-fix"></i>Correction</button><button class="f" data-f="new"><i class="t-new"></i>Nouveau</button></div>
+    <section class="nsec" id="matchmaking"><h2><span>Matchmaking</span><em>4</em></h2><ul class="notes"><li data-tag="update"><span class="tag t-up">AMÉLIORATION</span><span>Les joueurs de différents serveurs se retrouvent mieux dans la même partie.</span></li><li data-tag="update"><span class="tag t-up">AMÉLIORATION</span><span>Compteur de joueurs en recherche affiché pendant l&#x27;attente.</span></li><li data-tag="fix"><span class="tag t-fix">CORRECTION</span><span>Annuler la recherche ne lance plus une partie par erreur.</span></li><li data-tag="fix"><span class="tag t-fix">CORRECTION</span><span>Les inconnus ne sont plus mélangés dans ton escouade.</span></li></ul></section><section class="nsec" id="groupes"><h2><span>Groupes</span><em>3</em></h2><ul class="notes"><li data-tag="new"><span class="tag t-new">NOUVEAU</span><span>Le chef du groupe décide : rejouer ou retourner au menu, tout le groupe suit.</span></li><li data-tag="new"><span class="tag t-new">NOUVEAU</span><span>Les membres peuvent quitter le groupe à la fin d&#x27;une partie.</span></li><li data-tag="fix"><span class="tag t-fix">CORRECTION</span><span>Un membre du groupe n&#x27;est plus laissé de côté au lancement d&#x27;une recherche.</span></li></ul></section><section class="nsec" id="corrections"><h2><span>Corrections</span><em>1</em></h2><ul class="notes"><li data-tag="fix"><span class="tag t-fix">CORRECTION</span><span>Tu n&#x27;es plus renvoyé au menu en pleine partie.</span></li></ul></section>
+    <div class="endshare"><div><div class="kicker">Partager</div><p>Colle le lien dans Discord : la carte de l'annonce s'affiche toute seule.</p></div><div class="share">
+      <a class="btn btn-discord" href="https://discord.gg/rN2DHhAdBp" target="_blank" rel="noopener"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.3 4.4A19.6 19.6 0 0 0 15.4 3l-.6 1.3a18 18 0 0 0-5.6 0L8.6 3a19.6 19.6 0 0 0-4.9 1.4C.6 9-.2 13.5.2 18a19.8 19.8 0 0 0 6 3l1.3-2.1c-.7-.3-1.4-.6-2-1l.5-.4a14 14 0 0 0 12 0l.5.4c-.6.4-1.3.7-2 1l1.3 2.1a19.7 19.7 0 0 0 6-3c.5-5.2-.8-9.6-3.5-13.6ZM8.5 15.3c-1.2 0-2.1-1.1-2.1-2.4s.9-2.4 2.1-2.4 2.2 1.1 2.1 2.4c0 1.3-.9 2.4-2.1 2.4Zm7 0c-1.2 0-2.1-1.1-2.1-2.4s.9-2.4 2.1-2.4 2.2 1.1 2.1 2.4c0 1.3-.9 2.4-2.1 2.4Z"/></svg>Discuter sur Discord</a>
+      <button class="btn btn-ghost js-copy" data-url="https://marwantabarki-spec.github.io/Vantage/patch-notes/1-5-3-matchmaking-groupes/"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg>Copier le lien pour Discord</button>
+    </div></div>
+    <div class="pager"><a href="../../patch-notes/1-5-2-outbreak/"><small>Patch précédent</small>v1.5.2 · Outbreak : l&#x27;arrivée</a><a class="r" href="../../patch-notes/1-6-0-arsenal-tactique/"><small>Patch suivant</small>v1.6.0 · Arsenal tactique</a></div>
   </article>
 </div>
 </main>
 <footer class="foot">
-  <div class="wrap foot-in">
-    <span>© 2026 VANTAGE · Jeu non affilié à Roblox Corporation.</span>
-    <span><a href="https://www.roblox.com/games/110689622872143/VANTAGE" target="_blank" rel="noopener">Jouer sur Roblox</a> · <a href="https://discord.gg/rN2DHhAdBp" target="_blank" rel="noopener">Rejoindre le Discord</a></span>
+  <div class="wrap">
+    <div class="foot-cta">
+      <div><div class="kicker">Prêt au largage ?</div><h2>Rejoins la zone.</h2></div>
+      <div class="share"><a class="btn btn-primary" href="https://www.roblox.com/games/110689622872143/VANTAGE" target="_blank" rel="noopener"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M7 4.5v15a1 1 0 0 0 1.5.86l12.4-7.5a1 1 0 0 0 0-1.72L8.5 3.64A1 1 0 0 0 7 4.5Z"/></svg>Jouer sur Roblox</a>
+      <a class="btn btn-discord" href="https://discord.gg/rN2DHhAdBp" target="_blank" rel="noopener"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.3 4.4A19.6 19.6 0 0 0 15.4 3l-.6 1.3a18 18 0 0 0-5.6 0L8.6 3a19.6 19.6 0 0 0-4.9 1.4C.6 9-.2 13.5.2 18a19.8 19.8 0 0 0 6 3l1.3-2.1c-.7-.3-1.4-.6-2-1l.5-.4a14 14 0 0 0 12 0l.5.4c-.6.4-1.3.7-2 1l1.3 2.1a19.7 19.7 0 0 0 6-3c.5-5.2-.8-9.6-3.5-13.6ZM8.5 15.3c-1.2 0-2.1-1.1-2.1-2.4s.9-2.4 2.1-2.4 2.2 1.1 2.1 2.4c0 1.3-.9 2.4-2.1 2.4Zm7 0c-1.2 0-2.1-1.1-2.1-2.4s.9-2.4 2.1-2.4 2.2 1.1 2.1 2.4c0 1.3-.9 2.4-2.1 2.4Z"/></svg>Rejoindre le Discord</a></div>
+    </div>
+    <div class="foot-in">
+      <a class="brand" href="../../"><span class="mark"></span><span class="bname">VANTAGE</span></a>
+      <nav><a href="../../" class="">Accueil</a><a href="../../annonces/" class="">Annonces</a><a href="../../patch-notes/" class="on">Patchs</a><a href="../../roadmap/" class="">Roadmap</a><a href="../../status/" class="">Serveurs</a></nav>
+      <span class="legal">© 2026 VANTAGE · Jeu indépendant, non affilié à Roblox Corporation.</span>
+    </div>
   </div>
 </footer>
 <div class="toast" role="status" aria-live="polite"></div>
