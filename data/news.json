@@ -1,16 +1,5 @@
 [
   {
-    "id": "maj-1-7-0",
-    "title": "1.7.0 : Lames, Prestige et performances",
-    "date": "2026-11-16",
-    "tag": "Mise à jour",
-    "pinned": true,
-    "text": "La 1.7.0 est en ligne ! Les armes ont été entièrement redétaillées et chacune a maintenant sa fiche de stats dans le menu.\nPerformances : sur une config qui affichait 200 FPS, le jeu pouvait chuter à 100, voire 90 FPS en pleine partie. Après optimisation, on reste stable autour de 140 FPS sur la même machine. Les FPS dépendent de chaque ordinateur, mais tout le monde devrait sentir une partie plus fluide.\nMode zombie : nouvelle machine, le Portail de réintégration, qui ramène un coéquipier tombé pour 10 000 $.\nCouteaux : trois lames (Couteau de combat, Talon, Brush Cleaver), chacune avec ses camos à débloquer et sa maîtrise.\nPrestige : passe prestige au niveau 55, gagne un emblème, 400 crédits et un jeton de déblocage permanent à chaque fois, jusqu'à Maître Prestige et le niveau 1000.\nTous les détails sont dans les notes de patch. On se retrouve en jeu !",
-    "image": "assets/img/vx9-spectre-ingame.jpg",
-    "link": "https://marwantabarki-spec.github.io/Vantage/patch-notes/1-7-0-lames-et-prestige/",
-    "discord_message": ""
-  },
-  {
     "id": "bienvenue-site",
     "title": "Le site officiel de VANTAGE est en ligne",
     "date": "2026-11-16",
@@ -19,7 +8,8 @@
     "text": "Notes de patch, roadmap et état des serveurs en direct : tout est maintenant au même endroit. Rejoins le Discord pour réagir aux annonces.",
     "image": "assets/img/loadout.jpg",
     "link": "",
-    "discord_message": ""
+    "discord_message": "",
+    "gallery": []
   },
   {
     "id": "crimson",
