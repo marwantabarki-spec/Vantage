@@ -187,46 +187,5 @@
         ]
       }
     ]
-  },
-  {
-    "slug": "1-5-2-outbreak",
-    "version": "1.5.2",
-    "title": "Outbreak : l'arrivée",
-    "date": "2026-11-08",
-    "image": "assets/img/loadout.jpg",
-    "summary": "Cinématique d'arrivée en bateau pour le mode zombies, porte blindée, et plusieurs corrections importantes sur la carte.",
-    "discord_message": "",
-    "highlights": [
-      "Cinématique d'arrivée",
-      "Porte blindée",
-      "Zombies bloqués corrigés"
-    ],
-    "sections": [
-      {
-        "title": "Mode zombies",
-        "items": [
-          {
-            "tag": "new",
-            "text": "Cinématique d'arrivée : l'escouade débarque du bateau et rejoint le hall."
-          },
-          {
-            "tag": "new",
-            "text": "Porte blindée à l'entrée : elle se ferme quand tout le monde est entré."
-          },
-          {
-            "tag": "fix",
-            "text": "Les zombies bloqués à l'extérieur reviennent dans la zone de jeu (fini les « il reste 3 zombies »)."
-          },
-          {
-            "tag": "fix",
-            "text": "Toit ajouté sur la carte : plus moyen de sortir par le trou."
-          },
-          {
-            "tag": "fix",
-            "text": "Le courant principal rallume bien toutes les lumières."
-          }
-        ]
-      }
-    ]
   }
 ]
