@@ -1,1 +1,103 @@
-[]
+[
+  {
+    "slug": "0-9-0-lames-prestige-et-performances",
+    "version": "0.9.0",
+    "title": "Lames, Prestige et Performances",
+    "date": "2026-11-16",
+    "image": "assets/img/uploads/b49214a4-a36c-435a-86b3-abad2d32d55e-mwj117kq.jpg",
+    "summary": "La bêta 0.9.0 apporte une refonte visuelle complète de l'arsenal, une optimisation majeure des performances, une nouvelle machine en mode Zombies, l'arrivée des armes de mêlée et le système de Prestige.",
+    "discord_message": "",
+    "draft": true,
+    "highlights": [
+      "Refonte des modèles d'armes et fiches de statistiques détaillées",
+      "Optimisation majeure : jusqu'à 140 FPS stables sur notre configuration de test",
+      "Mode Zombies : nouvelle machine, le Portail de réintégration",
+      "Armes de mêlée : 3 lames avec leurs propres camouflages",
+      "Système de Prestige : 10 rangs et Maître Prestige"
+    ],
+    "sections": [
+      {
+        "title": "Armes",
+        "items": [
+          {
+            "tag": "update",
+            "text": "Refonte complète des modèles d'armes : vis, rails, marquages, sélecteurs de tir, chargeurs et organes de visée ont été retravaillés."
+          },
+          {
+            "tag": "update",
+            "text": "Ajout d'une fiche de statistiques pour chaque arme dans l'Armurerie : dégâts, cadence de tir, précision, portée, contrôle du recul, mobilité et maniabilité."
+          }
+        ]
+      },
+      {
+        "title": "Performances",
+        "items": [
+          {
+            "tag": "perf",
+            "text": "Optimisation majeure des performances en partie. Sur notre configuration de test, les FPS pouvaient chuter de 200 à 100, voire 90 en plein combat. Ils restent désormais stables autour de 160 FPS.\n\n\nLes valeurs indiquées proviennent de notre machine de test. Tous les joueurs devraient constater une amélioration de la fluidité."
+          },
+          {
+            "tag": "perf",
+            "text": "Allègement de la physique des opérateurs : le temps de calcul associé a été réduit de près de moitié."
+          },
+          {
+            "tag": "perf",
+            "text": "Optimisation des cartes : les vitres, ombres, collisions et éclairages éloignés sont désactivés lorsqu'ils ne sont pas visibles."
+          },
+          {
+            "tag": "perf",
+            "text": "L'interface ne recalcule plus ses textes en continu."
+          }
+        ]
+      },
+      {
+        "title": "Mode Zombies",
+        "items": [
+          {
+            "tag": "new",
+            "text": "Nouvelle machine : le Portail de réintégration. Pour 10 000 $, il permet de ramener immédiatement un coéquipier éliminé dans la partie."
+          },
+          {
+            "tag": "update",
+            "text": "Le Portail de réintégration rejoint les machines d'atouts, la Forge d'armes, la Caisse mystère et l'Établi."
+          }
+        ]
+      },
+      {
+        "title": "Armes de mêlée",
+        "items": [
+          {
+            "tag": "new",
+            "text": "Ajout d'un emplacement d'arme de mêlée dans chaque classe, avec ses propres statistiques, éliminations et maîtrise."
+          },
+          {
+            "tag": "new",
+            "text": "Chaque lame dispose de ses propres défis de camouflage (éliminations et attaques dans le dos) et de sa maîtrise."
+          }
+        ]
+      },
+      {
+        "title": "Progression",
+        "items": [
+          {
+            "tag": "new",
+            "text": "Système de Prestige : une fois le niveau 55 atteint, les joueurs peuvent passer au rang de Prestige suivant, jusqu'au Prestige 10."
+          },
+          {
+            "tag": "new",
+            "text": "Récompenses à chaque rang de Prestige : des items et principalement un jeton de déblocage permanent pour l'arme de votre choix."
+          },
+          {
+            "tag": "new",
+            "text": "Maître Prestige : après le Prestige 10, la progression continue jusqu'au niveau 1000, avec une récompense tous les 100 niveaux."
+          },
+          {
+            "tag": "update",
+            "text": "Aucune progression n'est perdue : niveaux d'armes, camouflages, maîtrises, crédits, opérateurs et quêtes d'arsenal sont conservés."
+          }
+        ]
+      }
+    ],
+    "card_image": "assets/img/uploads/f274946f-1dac-42d5-b639-2d176393e8ed-mwj0zut6.jpg"
+  }
+]
