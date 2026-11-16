@@ -64,3 +64,77 @@
 .ai-out img{width:100%;margin-top:14px;border:1px solid var(--line2)}
 @media (max-width:900px){.adm-split{grid-template-columns:1fr}.adm-list{position:static}.adm-board{grid-template-columns:1fr 1fr}.grid2,.grid3{grid-template-columns:1fr}.adm .top-in{flex-wrap:wrap;height:auto;padding:10px 0}.adm-tabs{order:3;width:100%;overflow:auto}}
 @media (max-width:560px){.adm-board{grid-template-columns:1fr}.itemrow{grid-template-columns:1fr auto}.itemrow select{grid-column:1/-1}}
+
+/* ---------------------------------------------------------------- Discord composer */
+.dc-wrap{display:grid;grid-template-columns:330px 1fr;gap:20px;align-items:start}
+.dc-side{position:sticky;top:90px}
+.dc-side .adm-card{padding:20px}
+.row.tight{margin-top:8px;gap:6px}
+.dc-emb{background:var(--bg2);border:1px solid var(--line);padding:10px;margin:8px 0;display:flex;flex-direction:column;gap:6px}
+.dc-emb b{font-family:var(--cond);text-transform:uppercase;letter-spacing:.08em;display:flex;align-items:center;gap:8px}
+.dc-sw{position:absolute;width:0;height:0}
+.dc-emb input{font-size:13px;padding:7px 9px}
+.mini{background:var(--panel2);border:1px solid var(--line2);color:var(--dim);padding:5px 8px;cursor:pointer;font-family:var(--cond);font-weight:700;letter-spacing:.04em;font-size:12px;text-transform:uppercase}
+.mini:hover{color:var(--text);border-color:var(--accent)} .mini.bad:hover{border-color:var(--bad);color:var(--bad)}
+.dc-tips{font-family:var(--cond);font-weight:600;letter-spacing:.06em;text-transform:uppercase;font-size:12px;color:var(--dim);margin-bottom:10px}
+.dc-preview{background:#313338;border:1px solid #1e1f22;border-radius:8px;padding:18px 18px 22px;font-family:'gg sans','Noto Sans','Barlow',system-ui,sans-serif;color:#dbdee1;font-size:15px;line-height:1.375}
+.dc-actions{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:14px}
+.dc-count{margin-right:auto;font-family:var(--mono);font-size:12px;color:var(--dim)}
+.dc-count.bad{color:var(--bad)}
+.dc-actions .btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+/* discord look */
+.dmsg{display:flex;gap:16px}
+.dav{flex:none;width:40px;height:40px;border-radius:50%;overflow:hidden;border:0;padding:0;cursor:pointer;background:var(--accent);color:#140700;font-family:var(--head);font-size:20px}
+.dav img{width:100%;height:100%;object-fit:cover}
+.dbody{flex:1;min-width:0}
+.dhead{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap}
+.dname{font-weight:600;color:#f2f3f5;font-size:16px}
+.dapp{background:#5865f2;color:#fff;font-size:10px;font-weight:700;padding:1px 5px;border-radius:3px;letter-spacing:.02em;transform:translateY(-2px)}
+.dtime{color:#949ba4;font-size:12px}
+.dcontent{margin:2px 0 4px;white-space:normal;min-height:22px}
+.ment{background:rgba(88,101,242,.3);color:#c9cdfb;border-radius:3px;padding:0 2px;font-weight:500}
+.demb{position:relative;display:grid;grid-template-columns:4px 1fr;max-width:520px;background:#2b2d31;border-radius:4px;margin-top:8px;overflow:hidden}
+.demb>.dgrid,.demb>.dimgs,.demb>.dfoot{grid-column:2}
+.dbar{grid-row:1/span 3;background:var(--bar);cursor:pointer;position:relative}
+.dbar input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.dgrid{display:grid;grid-template-columns:1fr auto;gap:16px;padding:10px 16px 0 12px}
+.dmain{min-width:0}
+.dauthor{display:flex;align-items:center;gap:8px;margin-top:4px}
+.dauthor img{width:24px;height:24px;border-radius:50%}
+.dauthn{font-size:14px;font-weight:600;color:#f2f3f5}
+.dtitle{font-weight:600;color:#f2f3f5;font-size:16px;margin-top:6px}
+.dtitle.linked{color:#00a8fc}
+.ddesc{font-size:14px;margin-top:6px;color:#dbdee1}
+.ddesc a,.dfv a,.dcontent a{color:#00a8fc;text-decoration:none}
+.ddesc code,.dfv code{background:#1e1f22;padding:1px 4px;border-radius:3px;font-size:13px}
+.ddesc .dq{display:block;border-left:4px solid #4e5058;padding-left:10px}
+.ddesc .h1{font-size:22px;font-weight:700;display:block}.ddesc .h2{font-size:19px;font-weight:700;display:block}.ddesc .h3{font-size:16px;font-weight:700;display:block}
+.dfields{display:flex;flex-wrap:wrap;gap:8px 0;margin-top:8px}
+.dfield{position:relative;flex:0 0 100%;padding-right:4px}
+.dfield.inl{flex:0 0 33.33%}
+.dfn{font-size:14px;font-weight:600;color:#f2f3f5}
+.dfv{font-size:14px}
+.dftools{position:absolute;right:0;top:-2px;display:none;gap:2px}
+.dfield:hover .dftools{display:flex}
+.dftools button,.dadd{background:#1e1f22;border:1px solid #3f4147;color:#b5bac1;font-size:11px;padding:1px 6px;cursor:pointer;border-radius:3px}
+.dadd{margin:8px 0 2px;opacity:.6}.dadd:hover,.dftools button:hover{opacity:1;color:#fff;border-color:var(--accent)}
+.dthumb{width:80px;height:80px;border:0;padding:0;border-radius:4px;overflow:hidden;cursor:pointer;background:transparent;margin-top:8px}
+.dthumb img{width:100%;height:100%;object-fit:cover}
+.dimgs{display:grid;gap:4px;padding:12px 16px 0 12px}
+.dimgs.n1{grid-template-columns:1fr}.dimgs.n2,.dimgs.n3,.dimgs.n4{grid-template-columns:1fr 1fr}
+.dimg{border:0;padding:0;cursor:pointer;border-radius:4px;overflow:hidden;background:transparent;min-height:60px}
+.dimg img{width:100%;max-height:300px;object-fit:cover;display:block}
+.dimgs.n3 .dimg:first-child{grid-row:span 2}
+.empty-img{border:1px dashed #4e5058!important;color:#949ba4;font-size:12px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.02)}
+.empty-img:hover{border-color:var(--accent)!important;color:#fff}
+.dthumb.empty-img{opacity:.55}
+.dimg.add{min-height:44px}
+.dfoot{display:flex;align-items:center;gap:6px;padding:8px 16px 14px 12px;font-size:12px;color:#949ba4}
+.dfoot img{width:20px;height:20px;border-radius:50%}
+.dfoottxt{font-size:12px;color:#b5bac1}
+/* in-place editing */
+.ed{outline:none;border-radius:3px;cursor:text;min-width:40px;transition:background .15s}
+.ed:hover{background:rgba(255,255,255,.04);box-shadow:0 0 0 1px rgba(255,106,26,.35)}
+.ed.editing{background:#1e1f22;box-shadow:0 0 0 2px var(--accent);white-space:pre-wrap;font-family:var(--mono);font-size:13px;color:#e6e6e6;padding:2px 4px}
+.ed:empty::before{content:attr(data-ph);color:#6d6f78;font-style:italic;font-weight:400}
+@media (max-width:1000px){.dc-wrap{grid-template-columns:1fr}.dc-side{position:static}.dfield.inl{flex-basis:50%}}

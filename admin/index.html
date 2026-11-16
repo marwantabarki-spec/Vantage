@@ -21,6 +21,7 @@
       <button data-tab="news" class="on">Annonces</button>
       <button data-tab="patches">Patchs</button>
       <button data-tab="roadmap">Roadmap</button>
+      <button data-tab="discord">Discord</button>
       <button data-tab="site">Statut &amp; site</button>
       <button data-tab="keys">Connexion</button>
     </nav>
@@ -37,7 +38,7 @@
       <p class="hint">Tes clés restent <b>uniquement dans ce navigateur</b> : elles ne sont jamais écrites sur le site ni sur GitHub. Sans clé, cette page ne peut rien modifier.</p>
       <label>Dépôt GitHub<input id="k-repo" placeholder="marwantabarki-spec/Vantage"></label>
       <label>Jeton GitHub (fine-grained, accès Contents : Read and write)<input id="k-gh" type="password" placeholder="github_pat_…" autocomplete="off"></label>
-      <label>Webhook Discord (salon d'annonces) — facultatif<input id="k-wh" type="password" placeholder="https://discord.com/api/webhooks/…" autocomplete="off"></label>
+      <label>Webhook Discord (salon d'annonces) — facultatif, tu pourras en ajouter d'autres dans l'onglet Discord<input id="k-wh" type="password" placeholder="https://discord.com/api/webhooks/…" autocomplete="off"></label>
       <label>Clé API OpenAI pour générer des images — facultatif<input id="k-ai" type="password" placeholder="sk-…" autocomplete="off"></label>
       <div class="row"><button class="btn btn-primary" id="k-save">Se connecter</button><button class="btn btn-ghost" id="k-clear">Tout effacer de ce navigateur</button></div>
       <details class="help"><summary>Comment obtenir ces clés ?</summary>
@@ -72,6 +73,39 @@
       <div class="adm-lh"><div><div class="kicker"><span class="num">//</span>Roadmap</div><h2>Tableau</h2></div><button class="btn btn-primary" id="road-save">Enregistrer et publier</button></div>
       <label>Note en haut de la page<input id="road-note"></label>
       <div class="adm-board" id="road-board"></div>
+    </div>
+  </section>
+
+  <!-- DISCORD -->
+  <section id="tab-discord" class="tab">
+    <div class="dc-wrap">
+      <aside class="dc-side">
+        <div class="adm-card">
+          <div class="kicker"><span class="num">//</span>Webhook Discord</div>
+          <h2>Message</h2>
+          <p class="hint" id="dc-origin">Message libre</p>
+          <label>Salon<select id="dc-hooks"></select></label>
+          <div class="row tight"><button class="btn btn-ghost sm" id="dc-addhook">+ Webhook</button><button class="btn btn-ghost sm" id="dc-delhook">Retirer</button></div>
+          <div class="bt" style="margin-top:20px">Partir de la page du site</div>
+          <div class="row tight"><button class="btn btn-ghost sm" id="dc-t-news">Dernière annonce</button><button class="btn btn-ghost sm" id="dc-t-patch">Dernier patch</button><button class="btn btn-ghost sm" id="dc-t-road">Roadmap</button><button class="btn btn-ghost sm" id="dc-t-blank">Vierge</button></div>
+          <div class="bt" style="margin-top:20px">Mention</div>
+          <div class="row tight"><button class="btn btn-ghost sm" id="dc-ping-e">@everyone</button><button class="btn btn-ghost sm" id="dc-ping-h">@here</button></div>
+          <div class="bt" style="margin-top:20px">Cartes (10 max)</div>
+          <div id="dc-embeds"></div>
+          <button class="btn btn-ghost sm" id="dc-addemb">+ Carte</button>
+        </div>
+      </aside>
+      <div class="dc-main">
+        <div class="dc-tips">Clique sur un texte pour l’écrire · clique sur une image pour la changer (clic droit = retirer) · clique sur la barre de couleur · jusqu’à 4 images par carte (galerie)</div>
+        <div class="dc-preview" id="dc-preview"></div>
+        <div class="dc-actions">
+          <span class="dc-count" id="dc-count"></span>
+          <button class="btn btn-ghost" id="dc-json">Copier le JSON</button>
+          <button class="btn btn-ghost" id="dc-update" disabled>Mettre à jour le dernier envoi</button>
+          <button class="btn btn-discord" id="dc-send">Envoyer sur Discord</button>
+        </div>
+        <p class="hint" id="dc-last"></p>
+      </div>
     </div>
   </section>
 
@@ -121,5 +155,6 @@
 
 <div class="toast" role="status" aria-live="polite"></div>
 <script src="../assets/admin.js"></script>
+<script src="../assets/discord.js"></script>
 </body>
 </html>

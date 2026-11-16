@@ -216,7 +216,7 @@
     });
     $('#n-disc').addEventListener('click', function () {
       if (!n.id) return say('Enregistre d’abord l’annonce sur le site.', true);
-      postDiscord({ title: n.title, text: n.text.slice(0, 1800), url: siteURL() + '/annonces/' + n.id + '/', image: n.image, footer: n.tag || 'Annonce' }).catch(function () {});
+      window.VTG.compose({ kind: 'news', ref: n });
     });
     $('#n-del').addEventListener('click', function () {
       if (!confirm('Supprimer « ' + n.title + ' » du site ?')) return;
@@ -290,8 +290,7 @@
     });
     $('#p-disc').addEventListener('click', function () {
       if (!p.slug) return say('Enregistre d’abord le patch sur le site.', true);
-      var lines = []; p.sections.forEach(function (s) { lines.push('**' + s.title + '**'); s.items.slice(0, 4).forEach(function (it) { lines.push('• ' + it.text); }); if (s.items.length > 4) lines.push('• … +' + (s.items.length - 4)); });
-      postDiscord({ title: 'Notes de patch v' + p.version + ' — ' + p.title, text: (p.summary + '\n\n' + lines.join('\n')).slice(0, 3900), url: siteURL() + '/patch-notes/' + p.slug + '/', image: p.image, footer: 'Notes de patch' }).catch(function () {});
+      window.VTG.compose({ kind: 'patch', ref: p });
     });
     $('#p-del').addEventListener('click', function () {
       if (!confirm('Supprimer le patch v' + p.version + ' du site ?')) return;
@@ -348,5 +347,8 @@
     writeJSON('data/site.json', s, 'Réglages du site (' + s.status.mode + ')').catch(function () {});
   });
 
+  // shared with the Discord composer (assets/discord.js)
+  window.VTG = { $: $, $$: $$, esc: esc, say: say, KEY: KEY, D: D, pickImage: pickImage, rawURL: rawURL, siteURL: siteURL, openTab: openTab,
+    saveNews: function (msg) { return writeJSON('data/news.json', D.news, msg); }, savePatches: function (msg) { return writeJSON('data/patches.json', D.patches, msg); } };
   loadAll();
 })();
