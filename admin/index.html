@@ -13,23 +13,58 @@
 <link rel="stylesheet" href="../assets/admin.css">
 </head>
 <body class="adm">
-<header class="top">
-  <div class="wrap top-in">
-    <a class="brand" href="../"><span class="mark"></span><span class="bname">VANTAGE</span></a>
-    <span class="adm-tag">ADMIN</span>
-    <nav class="nav adm-tabs" role="tablist">
-      <button data-tab="news" class="on">Annonces</button>
-      <button data-tab="patches">Patchs</button>
-      <button data-tab="roadmap">Roadmap</button>
-      <button data-tab="discord">Discord</button>
-      <button data-tab="site">Statut &amp; site</button>
-      <button data-tab="keys">Connexion</button>
-    </nav>
-    <span class="adm-sync" id="sync">Hors ligne</span>
-  </div>
-</header>
+<div class="adm-shell">
+<aside class="adm-side">
+  <a class="brand" href="../"><span class="mark"></span><span class="bname">VANTAGE</span><span class="adm-tag">ADMIN</span></a>
+  <nav class="adm-tabs" role="tablist">
+    <button data-tab="dash" class="on"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Tableau de bord</button>
+    <button data-tab="news"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16M4 12h16M4 19h10"/></svg>Annonces</button>
+    <button data-tab="patches"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l4 4v14H6z"/><path d="M9 12h7M9 16h5"/></svg>Patch notes</button>
+    <button data-tab="roadmap"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h5v12H4zM10 6h5v8h-5zM16 6h4v5h-4z"/></svg>Roadmap</button>
+    <button data-tab="site"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Statut &amp; site</button>
+    <button data-tab="keys"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M16 7l3 3"/></svg>Connexion</button>
+  </nav>
+  <div class="adm-repo"><small>Dépôt GitHub</small><span id="repo-name">—</span><span class="adm-sync" id="sync">Hors ligne</span></div>
+  <a class="btn btn-ghost sm" href="../" target="_blank" rel="noopener">Voir le site</a>
+</aside>
 
-<main class="wrap adm-main">
+<main class="adm-main">
+  <!-- COMMAND BAR -->
+  <div class="cmd" id="cmd">
+    <span class="cmd-ico" aria-hidden="true">/</span>
+    <textarea id="cmd-in" rows="1" autocomplete="off" spellcheck="false" placeholder="Tape une commande : /annonce, /patch, /roadmap… ou /modele patch pour un bloc complet" aria-label="Commande"></textarea>
+    <kbd>Ctrl K</kbd>
+    <div class="cmd-pop" id="cmd-pop" role="listbox" hidden></div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <section id="tab-dash" class="tab on">
+    <div class="dash-head"><div><div class="kicker" id="dash-date">—</div><h1>Salle de contrôle</h1></div>
+      <div class="row" style="margin:0"><button class="btn btn-ghost" data-cmd="/roadmap ">+ Roadmap</button><button class="btn btn-ghost" data-cmd="/patch ">+ Patch note</button><button class="btn btn-primary" data-cmd="/annonce ">+ Annonce</button></div></div>
+    <div class="kpis">
+      <div class="kpi"><small>Joueurs en jeu</small><b id="kp-playing">—</b><span id="kp-age">relevé Roblox</span></div>
+      <div class="kpi"><small>Lobbies publics</small><b id="kp-servers">—</b><span>serveurs visibles</span></div>
+      <div class="kpi"><small>Visites totales</small><b id="kp-visits">—</b><span id="kp-fav">—</span></div>
+      <div class="kpi kpi-m"><small>État du site</small><b id="kp-mode">—</b><button class="btn btn-ghost sm" id="kp-toggle">Activer la maintenance</button></div>
+    </div>
+    <div class="dash-grid">
+      <section class="dcard">
+        <div class="dcard-h"><b>Contenus</b>
+          <div class="dfilt"><button class="on" data-df="all">Tout</button><button data-df="draft">Brouillons <em id="df-n">0</em></button><button data-df="live">Publiés</button></div>
+          <input id="d-search" type="search" placeholder="Rechercher…" aria-label="Rechercher un contenu"></div>
+        <div class="drow dhead"><span>Type</span><span>Titre</span><span>État</span><span>Discord</span><span>Date</span></div>
+        <div id="d-rows"></div>
+      </section>
+      <section class="dcard">
+        <div class="dcard-h"><b>Journal</b><span class="hint" style="margin:0">derniers commits</span></div>
+        <div id="d-log"><div class="empty">Connecte-toi pour voir l'historique.</div></div>
+        <div class="dhelp"><b>Commandes</b>
+          <code>/annonce Titre #Tag</code><code>/patch 1.8.0 Titre</code><code>/roadmap prévu Titre</code><code>/modele annonce|patch|roadmap</code><code>/maintenance Message</code><code>/enligne</code><span class="hint" style="margin:6px 0 0">Bloc complet : <b>Shift+Entrée</b> pour aller à la ligne. Clés <code>image:</code> <code>carte:</code> <code>galerie:</code> <code>tag:</code> <code>lien:</code> <code>résumé:</code> <code>texte:</code> · lignes <code>+</code> nouveau <code>^</code> amélioration <code>=</code> équilibrage <code>!</code> correction <code>~</code> perf · <code>* </code>à retenir · <code>## </code>section · <code>!publier</code> <code>!discord</code> <code>!épingler</code> · image <code>ia description</code> pour la générer.</span>
+        </div>
+      </section>
+    </div>
+  </section>
+
   <!-- LOGIN -->
   <section id="tab-keys" class="tab">
     <div class="adm-card">
@@ -38,7 +73,7 @@
       <p class="hint">Tes clés restent <b>uniquement dans ce navigateur</b> : elles ne sont jamais écrites sur le site ni sur GitHub. Sans clé, cette page ne peut rien modifier.</p>
       <label>Dépôt GitHub<input id="k-repo" placeholder="marwantabarki-spec/Vantage"></label>
       <label>Jeton GitHub (fine-grained, accès Contents : Read and write)<input id="k-gh" type="password" placeholder="github_pat_…" autocomplete="off"></label>
-      <label>Webhook Discord (salon d'annonces) — facultatif, tu pourras en ajouter d'autres dans l'onglet Discord<input id="k-wh" type="password" placeholder="https://discord.com/api/webhooks/…" autocomplete="off"></label>
+      <label>Webhook Discord (salon d'annonces) — facultatif<input id="k-wh" type="password" placeholder="https://discord.com/api/webhooks/…" autocomplete="off"></label>
       <label>Clé API OpenAI pour générer des images — facultatif<input id="k-ai" type="password" placeholder="sk-…" autocomplete="off"></label>
       <div class="row"><button class="btn btn-primary" id="k-save">Se connecter</button><button class="btn btn-ghost" id="k-clear">Tout effacer de ce navigateur</button></div>
       <details class="help"><summary>Comment obtenir ces clés ?</summary>
@@ -52,7 +87,7 @@
   </section>
 
   <!-- NEWS -->
-  <section id="tab-news" class="tab on">
+  <section id="tab-news" class="tab">
     <div class="adm-split">
       <aside class="adm-list"><div class="adm-lh"><b>Annonces</b><button class="btn btn-primary sm" id="news-new">+ Nouvelle</button></div><div id="news-list"></div></aside>
       <div class="adm-edit" id="news-edit"><div class="empty">Choisis une annonce ou crée-en une.</div></div>
@@ -69,44 +104,7 @@
 
   <!-- ROADMAP -->
   <section id="tab-roadmap" class="tab">
-    <div class="adm-card wide">
-      <div class="adm-lh"><div><div class="kicker"><span class="num">//</span>Roadmap</div><h2>Tableau</h2></div><button class="btn btn-primary" id="road-save">Enregistrer et publier</button></div>
-      <label>Note en haut de la page<input id="road-note"></label>
-      <div class="adm-board" id="road-board"></div>
-    </div>
-  </section>
-
-  <!-- DISCORD -->
-  <section id="tab-discord" class="tab">
-    <div class="dc-wrap">
-      <aside class="dc-side">
-        <div class="adm-card">
-          <div class="kicker"><span class="num">//</span>Webhook Discord</div>
-          <h2>Message</h2>
-          <p class="hint" id="dc-origin">Message libre</p>
-          <label>Salon<select id="dc-hooks"></select></label>
-          <div class="row tight"><button class="btn btn-ghost sm" id="dc-addhook">+ Webhook</button><button class="btn btn-ghost sm" id="dc-delhook">Retirer</button></div>
-          <div class="bt" style="margin-top:20px">Partir de la page du site</div>
-          <div class="row tight"><button class="btn btn-ghost sm" id="dc-t-news">Dernière annonce</button><button class="btn btn-ghost sm" id="dc-t-patch">Dernier patch</button><button class="btn btn-ghost sm" id="dc-t-road">Roadmap</button><button class="btn btn-ghost sm" id="dc-t-blank">Vierge</button></div>
-          <div class="bt" style="margin-top:20px">Mention</div>
-          <div class="row tight"><button class="btn btn-ghost sm" id="dc-ping-e">@everyone</button><button class="btn btn-ghost sm" id="dc-ping-h">@here</button></div>
-          <div class="bt" style="margin-top:20px">Cartes (10 max)</div>
-          <div id="dc-embeds"></div>
-          <button class="btn btn-ghost sm" id="dc-addemb">+ Carte</button>
-        </div>
-      </aside>
-      <div class="dc-main">
-        <div class="dc-tips">Clique sur un texte pour l’écrire · clique sur une image pour la changer (clic droit = retirer) · clique sur la barre de couleur · jusqu’à 4 images par carte (galerie)</div>
-        <div class="dc-preview" id="dc-preview"></div>
-        <div class="dc-actions">
-          <span class="dc-count" id="dc-count"></span>
-          <button class="btn btn-ghost" id="dc-json">Copier le JSON</button>
-          <button class="btn btn-ghost" id="dc-update" disabled>Mettre à jour le dernier envoi</button>
-          <button class="btn btn-discord" id="dc-send">Envoyer sur Discord</button>
-        </div>
-        <p class="hint" id="dc-last"></p>
-      </div>
-    </div>
+    <div id="road-board"></div>
   </section>
 
   <!-- SITE -->
@@ -126,6 +124,7 @@
     </div>
   </section>
 </main>
+</div>
 
 <!-- image picker -->
 <dialog id="imgdlg" class="adm-dlg">
@@ -155,6 +154,6 @@
 
 <div class="toast" role="status" aria-live="polite"></div>
 <script src="../assets/admin.js"></script>
-<script src="../assets/discord.js"></script>
+<script src="../assets/pageedit.js"></script>
 </body>
 </html>
