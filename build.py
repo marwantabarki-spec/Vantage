@@ -17,9 +17,9 @@ def load(name, default=None):
         return json.load(f)
 
 SITE = load("site.json")
-PATCHES = sorted(load("patches.json", []), key=lambda p: (p["date"], [int(x) if x.isdigit() else 0 for x in str(p["version"]).split(".")]), reverse=True)
+PATCHES = sorted([x for x in load("patches.json", []) if not x.get("draft")], key=lambda p: (p["date"], [int(x) if x.isdigit() else 0 for x in str(p["version"]).split(".")]), reverse=True)
 ROADMAP = load("roadmap.json", {"note": "", "columns": []})
-NEWS = sorted(load("news.json", []), key=lambda n: (not n.get("pinned"), n["date"]), reverse=False)
+NEWS = sorted([x for x in load("news.json", []) if not x.get("draft")], key=lambda n: (not n.get("pinned"), n["date"]), reverse=False)
 NEWS = sorted(NEWS, key=lambda n: n["date"], reverse=True)
 NEWS = [n for n in NEWS if n.get("pinned")] + [n for n in NEWS if not n.get("pinned")]
 BASE = SITE["base_url"].rstrip("/")
@@ -143,7 +143,7 @@ def pcard(p, root):
     c = counts(p)
     chips = "".join(f'<span class="chip {TAGS[t][1]}">{n} {TAGS[t][0].lower()}</span>' for t, n in c.items() if t in TAGS)
     return f"""<a class="pcard" href="{root}patch-notes/{p['slug']}/">
-      <div class="pimg"><img src="{root}{p['image']}" alt="" loading="lazy"><span class="ver">v{E(p['version'])}</span></div>
+      <div class="pimg"><img src="{root}{p.get('card_image') or p['image']}" alt="" loading="lazy"><span class="ver">v{E(p['version'])}</span></div>
       <div class="pbody">
         <div class="meta">Notes de patch · {fdate(p['date'])}</div>
         <h3>{E(p['title'])}</h3>
@@ -155,7 +155,7 @@ def pcard(p, root):
 
 def ncard(n, root, feat=False):
     return f"""<a class="ncard{' feat' if feat else ''}" href="{root}annonces/{n['id']}/">
-      <div class="nimg"><img src="{root}{n.get('image') or SITE['default_image']}" alt="" loading="lazy"></div>
+      <div class="nimg"><img src="{root}{n.get('card_image') or n.get('image') or SITE['default_image']}" alt="" loading="lazy"></div>
       <div class="nbody">
         <div class="ndate">{sdate(n['date'])}</div>
         <div><div class="meta">{E(n.get('tag') or 'Annonce')}{' · <span class="pin">Épinglé</span>' if n.get('pinned') else ''}</div>
@@ -163,11 +163,11 @@ def ncard(n, root, feat=False):
       </div>
     </a>"""
 
-def roadmap_board(limit=None):
+def roadmap_board(limit=None, root=""):
     cols = []
     for idx, col in enumerate(ROADMAP["columns"]):
         items = col["items"][:limit] if limit else col["items"]
-        lis = "".join(f'<li class="ritem"><div class="rtag">{E(i.get("tag", ""))}</div><h4>{E(i["title"])}</h4><p>{E(i.get("text", ""))}</p></li>' for i in items)
+        lis = "".join(f'<li class="ritem">' + (f'<img class="rimg" src="{root}{E(i["image"])}" alt="" loading="lazy">' if i.get("image") else "") + f'<div class="rtag">{E(i.get("tag", ""))}</div><h4>{E(i["title"])}</h4><p>{E(i.get("text", ""))}</p></li>' for i in items)
         cols.append(f'<div class="rcol r-{E(col["id"])}"><div class="rhead"><span class="rn">0{idx + 1}</span><span class="dot"></span>{E(col["title"])}<span class="n">{len(col["items"])}</span></div><ul>{lis}</ul></div>')
     return f'<div class="board">{"".join(cols)}</div>'
 
@@ -189,7 +189,8 @@ for i, p in enumerate(PATCHES):
     secs = []
     for s in p["sections"]:
         lis = "".join(f'<li data-tag="{it["tag"]}"><span class="tag {TAGS.get(it["tag"], ("", ""))[1]}">{TAGS.get(it["tag"], (it["tag"].upper(), ""))[0]}</span><span>{E(it["text"])}</span></li>' for it in s["items"])
-        secs.append(f'<section class="nsec" id="{E(slugify(s["title"]))}"><h2><span>{E(s["title"])}</span><em>{len(s["items"])}</em></h2><ul class="notes">{lis}</ul></section>')
+        simg = f'<img class="secimg" src="{root}{E(s["image"])}" alt="" loading="lazy">' if s.get("image") else ""
+        secs.append(f'<section class="nsec" id="{E(slugify(s["title"]))}"><h2><span>{E(s["title"])}</span><em>{len(s["items"])}</em></h2>{simg}<ul class="notes">{lis}</ul></section>')
     toc = "".join(f'<a href="#{E(slugify(s["title"]))}">{E(s["title"])}<em>{len(s["items"])}</em></a>' for s in p["sections"])
     filt = '<button class="f on" data-f="all">Tout</button>' + "".join(f'<button class="f" data-f="{t}"><i class="{TAGS[t][1]}"></i>{TAGS[t][0].capitalize()}</button>' for t in counts(p) if t in TAGS)
     hl = "".join(f"<li>{E(h)}</li>" for h in p.get("highlights", []))
@@ -226,12 +227,48 @@ for i, p in enumerate(PATCHES):
           page(f"patch-notes/{p['slug']}", f"{SITE['name']} · v{p['version']} — {p['title']}", p["summary"], p["image"], body, root, "article", "patch"))
 
 # ---------------------------------------------------------------- patch list
+def pcats(p):
+    cats = []
+    for sct in p["sections"]:
+        t = sct["title"].strip()
+        if t and t not in cats:
+            cats.append(t)
+    return cats
+def pcard2(p, root):
+    cats = pcats(p)
+    return f"""<a class="pc2" href="{root}patch-notes/{p['slug']}/" data-cats="{E('|'.join(c.lower() for c in cats))}" data-q="{E((p['version'] + ' ' + p['title'] + ' ' + p['summary']).lower())}">
+      <div class="pc2-im"><img src="{root}{p.get('card_image') or p['image']}" alt="" loading="lazy"><span class="ver">v{E(p['version'])}</span></div>
+      <div class="pc2-bd"><span class="pdate">{fdate(p['date'])} · v{E(p['version'])}</span><h3>{E(p['title'])}</h3><p>{E(p['summary'])}</p>
+      <span class="pmore">Lire <i>→</i></span></div></a>"""
 root = "../"
-lst = "".join(pcard(p, root) for p in PATCHES)
+allcats = []
+for p in PATCHES:
+    for c in pcats(p):
+        if c.lower() not in [x.lower() for x in allcats]:
+            allcats.append(c)
+chips = '<button class="pchip on" data-cat="">Tout</button>' + "".join(f'<button class="pchip" data-cat="{E(c.lower())}">{E(c)}</button>' for c in allcats[:6])
+lt = PATCHES[0] if PATCHES else None
+feat = ""
+if lt:
+    fcats = "".join(f'<span class="ptag">{E(c)}</span>' for c in pcats(lt)[:4])
+    feat = f"""<a class="pfeat" href="{root}patch-notes/{lt['slug']}/" data-cats="{E('|'.join(c.lower() for c in pcats(lt)))}" data-q="{E((lt['version'] + ' ' + lt['title'] + ' ' + lt['summary']).lower())}">
+  <div class="pfeat-im"><img src="{root}{lt.get('card_image') or lt['image']}" alt=""><span class="pflag">Dernier patch</span></div>
+  <div class="pfeat-bd"><span class="pdate">{fdate(lt['date'])} · v{E(lt['version'])}</span><h2>{E(lt['title'])}</h2><p>{E(lt['summary'])}</p>
+  <div class="ptags">{fcats}</div><span class="pmore big">Lire le patch note <i>→</i></span></div></a>"""
+rest = "".join(pcard2(p, root) for p in PATCHES[1:])
 body = f"""
-<section class="shero"><div class="wrap"><div class="kicker"><span class="num">//</span>Journal des mises à jour</div><h1>Notes de patch</h1>
-<p class="lead">Tout ce qui change dans {E(SITE['name'])}, mise à jour par mise à jour.</p></div></section>
-<div class="wrap"><div class="grid">{lst}</div></div>"""
+<section class="pbanner"><div class="bgimg" style="background-image:url('{root}{lt['image'] if lt else SITE['default_image']}')"></div>
+  <div class="wrap"><div class="kicker"><span class="num">//</span>Journal des mises à jour</div><h1>Patch notes</h1>
+  <p class="lead">Tous les changements de {E(SITE['name'])} : armes, modes, performances et corrections.</p></div></section>
+<div class="wrap">
+  <div class="pfilter" role="toolbar" aria-label="Filtrer les patchs">{chips}
+    <label class="psearch"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input type="search" placeholder="Rechercher un patch…" aria-label="Rechercher un patch"></label></div>
+  {feat}
+  <div class="sect-head"><div><h2>Précédentes mises à jour</h2></div><span class="pcount">{len(PATCHES)} patchs</span></div>
+  <div class="pgrid2" data-pgrid>{rest}</div>
+  <div class="pempty" hidden>Aucun patch ne correspond.</div>
+  <div class="pmorewrap"><button class="btn btn-ghost" data-pmore hidden>Charger plus</button></div>
+</div>"""
 write("patch-notes/index.html", page("patch-notes", f"{SITE['name']} · Notes de patch", f"Toutes les mises à jour de {SITE['name']}.", SITE["default_image"], body, root, active="patch"))
 
 # ---------------------------------------------------------------- announcements
@@ -240,6 +277,9 @@ for n in NEWS:
     url = f"{BASE}/annonces/{n['id']}/"
     extra = f'<a class="btn btn-primary" href="{E(n["link"])}" target="_blank" rel="noopener">En savoir plus</a>' if n.get("link") else ""
     paras = "".join(f"<p>{E(t)}</p>" for t in n["text"].split("\n") if t.strip())
+    gal = n.get("gallery") or []
+    if gal:
+        paras += f'<div class="gal n{min(len(gal), 4)}">' + "".join(f'<a href="{root}{E(g)}" target="_blank" rel="noopener"><img src="{root}{E(g)}" alt="" loading="lazy"></a>' for g in gal) + '</div>'
     body = f"""
 <section class="phero"><div class="bgimg" style="background-image:url('{root}{n.get('image') or SITE['default_image']}')"></div>
   <div class="wrap">
@@ -266,7 +306,7 @@ body = f"""
 <p class="lead">{E(ROADMAP['note'])}</p>
 <div class="share"><a class="btn btn-discord" href="{E(SITE['discord_invite'])}" target="_blank" rel="noopener">{DISCORD_SVG}Proposer une idée sur Discord</a>
 <button class="btn btn-ghost js-copy" data-url="{BASE}/roadmap/">{LINK_SVG}Copier le lien pour Discord</button></div></div></section>
-<div class="wrap">{roadmap_board()}</div>"""
+<div class="wrap">{roadmap_board(root=root)}</div>"""
 write("roadmap/index.html", page("roadmap", f"{SITE['name']} · Roadmap", ROADMAP["note"], SITE["default_image"], body, root, active="road"))
 
 # ---------------------------------------------------------------- status
@@ -287,36 +327,48 @@ write("status/index.html", page("status", f"{SITE['name']} · État des serveurs
 root = ""
 latest = PATCHES[0] if PATCHES else None
 hero_img = latest["image"] if latest else SITE["default_image"]
-news_html = "".join(ncard(n, root, i == 0) for i, n in enumerate(NEWS[:3]))
+def nrow(n, root):
+    img = n.get('card_image') or n.get('image') or SITE['default_image']
+    d = n['date'].split('-')
+    side = '<em class="pin">Épinglé</em>' if n.get('pinned') else ''
+    return f"""<a class="nrow" href="{root}annonces/{n['id']}/"><span class="nr-d">{d[2]}.{d[1]}</span><img src="{root}{img}" alt="" loading="lazy">
+      <span class="nr-t"><span class="ptag">{E(n.get('tag') or 'Annonce')}</span><b>{E(n['title'])}</b></span>{side}</a>"""
+snap = []
+for col in ROADMAP["columns"]:
+    if col["id"] in ("progress", "planned", "ideas"):
+        for it in col["items"][:2]:
+            snap.append(f'<li class="rs-{E(col["id"])}"><i></i><span><b>{E(it["title"])}</b><small>{E(col["title"])}{(" · " + E(it["tag"])) if it.get("tag") else ""}</small></span></li>')
+tags = "".join(f'<span class="ptag">{E(c)}</span>' for c in (pcats(latest)[:3] if latest else []))
 body = f"""
-<section class="hero"><div class="bgimg kb" style="background-image:url('{hero_img}')"></div><div class="scan" aria-hidden="true"></div>
-  <div class="wrap hero-in">
-    <div class="hero-txt">
-      <div class="kicker"><span class="live"></span>Dernière mise à jour · v{E(latest['version'])}</div>
-      <h1 class="glitch" data-text="{E(latest['title'])}">{E(latest['title'])}</h1>
-      <p class="lead">{E(latest['summary'])}</p>
-      <div class="share">
-        <a class="btn btn-primary" href="patch-notes/{latest['slug']}/">Lire les notes de patch</a>
-        <a class="btn btn-discord" href="{E(latest.get('discord_message') or SITE['discord_invite'])}" target="_blank" rel="noopener">{DISCORD_SVG}Annonce Discord</a>
-        <a class="btn btn-ghost" href="{E(SITE['roblox_url'])}" target="_blank" rel="noopener">{PLAY_SVG}Jouer</a>
-      </div>
+<section class="hero2">
+  <div class="h2-txt">
+    <div class="ptags"><span class="ptag hot">MAJ {E(latest['version'])}</span>{tags}</div>
+    <h1>{E(latest['title'])}</h1>
+    <p class="lead">{E(latest['summary'])}</p>
+    <div class="share">
+      <a class="btn btn-primary" href="patch-notes/{latest['slug']}/">Lire le patch note</a>
+      <a class="btn btn-ghost" href="{E(SITE['roblox_url'])}" target="_blank" rel="noopener">{PLAY_SVG}Jouer</a>
+      <a class="btn btn-discord" href="{E(latest.get('discord_message') or SITE['discord_invite'])}" target="_blank" rel="noopener">{DISCORD_SVG}Discord</a>
     </div>
-    <a class="hero-status" href="status/">
-      <div class="hs-top"><span class="sdot"></span><span data-stat="state">Vérification…</span></div>
-      <b data-stat="playing">—</b><span class="hs-l">joueurs en jeu maintenant</span>
-      <div class="hs-row"><span><b data-stat="servers">—</b> lobbies</span><span><b data-stat="visits">—</b> visites</span></div>
-      <span class="hs-go">État des serveurs →</span>
-    </a>
+  </div>
+  <div class="h2-img"><div class="bgimg kb" style="background-image:url('{hero_img}')"></div>
+    <span class="fig">FIG. 01 — v{E(latest['version'])}</span>
+    <a class="hero-status" href="status/"><div class="hs-top"><span class="sdot"></span><span data-stat="state">Vérification…</span></div>
+      <b data-stat="playing">—</b><span class="hs-l">joueurs en jeu maintenant</span></a>
   </div>
 </section>
 <div class="wrap">
   {STATS}
-  {sect('01', 'Quoi de neuf', 'Annonces', ('annonces/', 'Toutes les annonces'), root)}
-  <div class="news">{news_html}</div>
+  <div class="home2">
+    <div>
+      {sect('01', 'Quoi de neuf', 'Dernières annonces', ('annonces/', 'Tout voir'), root)}
+      <div class="nrows">{''.join(nrow(n, root) for n in NEWS[:4])}</div>
+    </div>
+    <aside class="rsnap"><div class="kicker">Roadmap</div><h3>Prochains objectifs</h3><ul>{''.join(snap[:5])}</ul>
+      <a class="btn btn-ghost" href="roadmap/">Roadmap complète</a></aside>
+  </div>
   {sect('02', 'Journal', 'Notes de patch', ('patch-notes/', 'Tous les patchs'), root)}
-  <div class="grid">{''.join(pcard(p, root) for p in PATCHES[:3])}</div>
-  {sect('03', 'Ce qui arrive', 'Roadmap', ('roadmap/', 'Roadmap complète'), root)}
-  {roadmap_board(limit=2)}
+  <div class="pgrid2">{''.join(pcard2(p, root) for p in PATCHES[:3])}</div>
 </div>"""
 write("index.html", page("", f"{SITE['name']} · {SITE['tagline']}", latest["summary"], hero_img, body, root, active="home"))
 
