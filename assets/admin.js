@@ -40,7 +40,7 @@
   function writeJSON(file, data, message) {
     setSync('Publication…', 'busy');
     return putFile(file, b64enc(JSON.stringify(data, null, 2) + '\n'), message).then(function () {
-      setSync('Publié · en ligne dans ~1 min', 'ok'); say('Enregistré. Le site se met à jour dans environ une minute.');
+      setSync('Publié · en ligne dans ~1 min', 'ok'); say('Enregistré. Le site se met à jour dans environ une minute.'); renderDash();
     }, function (e) {
       if (e.status === 409 || e.status === 422) { say('Le fichier a changé ailleurs : recharge la page puis recommence.', true); }
       else say('Erreur GitHub : ' + e.message, true);
@@ -55,15 +55,15 @@
     return Promise.all([readJSON('data/site.json'), readJSON('data/news.json').catch(function () { return []; }), readJSON('data/patches.json'), readJSON('data/roadmap.json')])
       .then(function (r) {
         D.site = r[0]; D.news = r[1]; D.patches = r[2]; D.roadmap = r[3];
-        setSync('Connecté', 'ok'); renderNewsList(); renderPatchList(); renderRoad(); renderSite();
-        if ($('.tab.on').id === 'tab-keys') openTab('news');
+        setSync('Connecté', 'ok'); renderNewsList(); renderPatchList(); renderRoad(); renderSite(); renderDash(); loadLog();
+        if ($('.tab.on').id === 'tab-keys') openTab('dash');
       }, function (e) { setSync('Erreur', 'err'); say(e.status === 401 ? 'Jeton GitHub refusé : vérifie-le dans Connexion.' : e.status === 404 ? 'Dépôt introuvable ou jeton sans accès à ce dépôt.' : 'Erreur : ' + e.message, true); openTab('keys'); });
   }
   function siteURL() { return (D.site && D.site.base_url ? D.site.base_url.replace(/\/$/, '') : ''); }
   function rawURL(path) { return 'https://raw.githubusercontent.com/' + KEY.repo + '/' + BRANCH + '/' + path; }
 
   // ------------------------------------------------------------------ tabs
-  function openTab(t) { $$('.adm-tabs button').forEach(function (b) { b.classList.toggle('on', b.dataset.tab === t); }); $$('.tab').forEach(function (s) { s.classList.toggle('on', s.id === 'tab-' + t); }); }
+  function openTab(t) { if (t === 'dash') renderDash(); $$('.adm-tabs button').forEach(function (b) { b.classList.toggle('on', b.dataset.tab === t); }); $$('.tab').forEach(function (s) { s.classList.toggle('on', s.id === 'tab-' + t); }); }
   $$('.adm-tabs button').forEach(function (b) { b.addEventListener('click', function () { openTab(b.dataset.tab); }); });
 
   // ------------------------------------------------------------------ keys
@@ -185,7 +185,7 @@
   var curNews = -1;
   function renderNewsList() {
     var l = $('#news-list');
-    l.innerHTML = D.news.map(function (n, i) { return '<button class="li' + (i === curNews ? ' on' : '') + '" data-i="' + i + '">' + (n.pinned ? '📌 ' : '') + esc(n.title) + '<small>' + esc(n.date) + ' · ' + esc(n.tag || '') + '</small></button>'; }).join('') || '<div class="empty">Aucune annonce.</div>';
+    l.innerHTML = D.news.map(function (n, i) { return '<button class="li' + (i === curNews ? ' on' : '') + '" data-i="' + i + '">' + (n.draft ? '<span class="drb">Brouillon</span> ' : '') + (n.pinned ? '📌 ' : '') + esc(n.title) + '<small>' + esc(n.date) + ' · ' + esc(n.tag || '') + '</small></button>'; }).join('') || '<div class="empty">Aucune annonce.</div>';
     $$('.li', l).forEach(function (b) { b.addEventListener('click', function () { editNews(+b.dataset.i); }); });
   }
   $('#news-new').addEventListener('click', function () {
@@ -197,33 +197,22 @@
   function editNews(i) {
     curNews = i; renderNewsList();
     var n = D.news[i], box = $('#news-edit');
-    box.innerHTML = '<div class="kicker"><span class="num">//</span>Annonce</div><h2>' + esc(n.title) + '</h2>' +
-      field('Titre', n.title, 'data-k="title"') +
-      '<div class="grid3">' + field('Date', n.date, 'type="date" data-k="date"') + field('Catégorie', n.tag, 'data-k="tag" placeholder="Événement, Boutique…"') +
-      '<label class="chk"><input type="checkbox" data-k="pinned"' + (n.pinned ? ' checked' : '') + '> Épingler en haut</label></div>' +
-      '<label>Texte (une ligne vide = nouveau paragraphe)<textarea rows="6" data-k="text">' + esc(n.text) + '</textarea></label>' +
-      '<label>Image</label><div id="news-img"></div>' +
-      '<div class="grid2">' + field('Lien externe (facultatif)', n.link, 'data-k="link" placeholder="https://…"') + field('Lien du message Discord (facultatif)', n.discord_message, 'data-k="discord_message" placeholder="https://discord.com/channels/…"') + '</div>' +
-      '<div class="row"><button class="btn btn-primary" id="n-save">Enregistrer et publier</button><button class="btn btn-discord" id="n-disc">Publier sur Discord</button><button class="btn btn-ghost" id="n-del">Supprimer</button></div>' +
-      '<p class="hint">Publie d’abord sur le site, puis sur Discord : l’embed renvoie vers la page de l’annonce.</p>';
-    $$('[data-k]', box).forEach(function (el) { el.addEventListener('input', function () { n[el.dataset.k] = el.type === 'checkbox' ? el.checked : el.value; if (el.dataset.k === 'title') $('h2', box).textContent = el.value; }); });
-    autosize(box);
-    $('#news-img').appendChild(imageField(function () { return n.image; }, function (p) { n.image = p; }, function () { return n.title + '. ' + n.text; }));
-    $('#n-save').addEventListener('click', function () {
-      if (!n.id) n.id = slug(n.title);
-      if (D.news.some(function (x, j) { return j !== i && x.id === n.id; })) n.id += '-' + Date.now().toString(36);
-      writeJSON('data/news.json', D.news, 'Annonce : ' + n.title).then(renderNewsList, function () {});
+    window.VTG.page.news(n, box, {
+      save: function () {
+        if (!n.id) n.id = slug(n.title);
+        if (D.news.some(function (x, j) { return j !== i && x.id === n.id; })) n.id += '-' + Date.now().toString(36);
+        if (n.gallery && !n.gallery.length) delete n.gallery;
+        writeJSON('data/news.json', D.news, (n.draft ? 'Brouillon annonce : ' : 'Annonce : ') + n.title).then(renderNewsList, function () {});
+      },
+      del: function () {
+        if (!confirm('Supprimer « ' + n.title + ' » du site ?')) return;
+        D.news.splice(i, 1); curNews = -1; box.innerHTML = '<div class="empty">Annonce supprimée.</div>';
+        writeJSON('data/news.json', D.news, 'Suppression annonce : ' + n.title).then(renderNewsList, function () {});
+      }
     });
-    $('#n-disc').addEventListener('click', function () {
-      if (!n.id) return say('Enregistre d’abord l’annonce sur le site.', true);
-      window.VTG.compose({ kind: 'news', ref: n });
-    });
-    $('#n-del').addEventListener('click', function () {
-      if (!confirm('Supprimer « ' + n.title + ' » du site ?')) return;
-      D.news.splice(i, 1); curNews = -1; box.innerHTML = '<div class="empty">Annonce supprimée.</div>';
-      writeJSON('data/news.json', D.news, 'Suppression annonce : ' + n.title).then(renderNewsList, function () {});
-    });
+    draftToggle(n, box);
   }
+
 
   // ------------------------------------------------------------------ PATCHES
   var curPatch = -1;
@@ -234,7 +223,7 @@
   function renderPatchList() {
     var l = $('#patch-list');
     D.patches.sort(cmpPatch);
-    l.innerHTML = D.patches.map(function (p, i) { return '<button class="li' + (i === curPatch ? ' on' : '') + '" data-i="' + i + '">v' + esc(p.version) + ' · ' + esc(p.title) + '<small>' + esc(p.date) + '</small></button>'; }).join('');
+    l.innerHTML = D.patches.map(function (p, i) { return '<button class="li' + (i === curPatch ? ' on' : '') + '" data-i="' + i + '">' + (p.draft ? '<span class="drb">Brouillon</span> ' : '') + 'v' + esc(p.version) + ' · ' + esc(p.title) + '<small>' + esc(p.date) + '</small></button>'; }).join('');
     $$('.li', l).forEach(function (b) { b.addEventListener('click', function () { editPatch(+b.dataset.i); }); });
   }
   $('#patch-new').addEventListener('click', function () {
@@ -247,90 +236,35 @@
   function editPatch(i) {
     curPatch = i; renderPatchList();
     var p = D.patches[i], box = $('#patch-edit');
-    function secsHTML() {
-      return p.sections.map(function (s, si) {
-        return '<div class="secb" data-si="' + si + '"><div class="adm-lh"><input value="' + esc(s.title) + '" data-sec="' + si + '" placeholder="Titre de la section"><button class="x" data-delsec="' + si + '" title="Supprimer la section">✕</button></div>' +
-          s.items.map(function (it, ii) {
-            return '<div class="itemrow"><select data-tag="' + si + ':' + ii + '">' + TAGS.map(function (t) { return '<option value="' + t[0] + '"' + (t[0] === it.tag ? ' selected' : '') + '>' + t[1] + '</option>'; }).join('') + '</select>' +
-              '<textarea data-it="' + si + ':' + ii + '" rows="1" placeholder="Décris le changement">' + esc(it.text) + '</textarea><button class="x" data-delit="' + si + ':' + ii + '" title="Supprimer">✕</button></div>';
-          }).join('') + '<button class="btn btn-ghost sm" data-addit="' + si + '">+ Ligne</button></div>';
-      }).join('') + '<button class="btn btn-ghost sm" id="addsec">+ Section</button>';
-    }
-    box.innerHTML = '<div class="kicker"><span class="num">//</span>Note de patch</div><h2>v' + esc(p.version) + ' · ' + esc(p.title) + '</h2>' +
-      '<div class="grid3">' + field('Version', p.version, 'data-k="version"') + field('Date', p.date, 'type="date" data-k="date"') + field('Titre', p.title, 'data-k="title"') + '</div>' +
-      '<label>Résumé (affiché sur les cartes et dans Discord)<textarea rows="3" data-k="summary">' + esc(p.summary) + '</textarea></label>' +
-      '<label>À retenir (une ligne par point)<textarea rows="3" data-k="highlights">' + esc((p.highlights || []).join('\n')) + '</textarea></label>' +
-      '<label>Image</label><div id="patch-img"></div>' +
-      field('Lien du message Discord (facultatif)', p.discord_message, 'data-k="discord_message" placeholder="https://discord.com/channels/…"') +
-      '<h3 class="kicker" style="margin-top:22px">Changements</h3><div id="secs">' + secsHTML() + '</div>' +
-      '<div class="row"><button class="btn btn-primary" id="p-save">Enregistrer et publier</button><button class="btn btn-discord" id="p-disc">Publier sur Discord</button><button class="btn btn-ghost" id="p-del">Supprimer</button></div>';
-    $$('[data-k]', box).forEach(function (el) { el.addEventListener('input', function () {
-      var k = el.dataset.k; p[k] = k === 'highlights' ? el.value.split('\n').map(function (s) { return s.trim(); }).filter(Boolean) : el.value;
-      $('h2', box).textContent = 'v' + p.version + ' · ' + p.title;
-    }); });
-    $('#patch-img').appendChild(imageField(function () { return p.image; }, function (np) { p.image = np; }, function () { return 'Patch ' + p.version + ' "' + p.title + '": ' + p.summary; }));
-    function bindSecs() {
-      var sb = $('#secs');
-      $$('[data-sec]', sb).forEach(function (el) { el.addEventListener('input', function () { p.sections[+el.dataset.sec].title = el.value; }); });
-      $$('[data-tag]', sb).forEach(function (el) { el.addEventListener('change', function () { var a = el.dataset.tag.split(':'); p.sections[a[0]].items[a[1]].tag = el.value; }); });
-      $$('[data-it]', sb).forEach(function (el) { el.addEventListener('input', function () { var a = el.dataset.it.split(':'); p.sections[a[0]].items[a[1]].text = el.value; }); });
-      $$('[data-delit]', sb).forEach(function (el) { el.addEventListener('click', function () { var a = el.dataset.delit.split(':'); p.sections[a[0]].items.splice(a[1], 1); redraw(); }); });
-      $$('[data-addit]', sb).forEach(function (el) { el.addEventListener('click', function () { p.sections[+el.dataset.addit].items.push({ tag: 'new', text: '' }); redraw(); }); });
-      $$('[data-delsec]', sb).forEach(function (el) { el.addEventListener('click', function () { if (confirm('Supprimer cette section ?')) { p.sections.splice(+el.dataset.delsec, 1); redraw(); } }); });
-      $('#addsec').addEventListener('click', function () { p.sections.push({ title: 'Nouvelle section', items: [{ tag: 'new', text: '' }] }); redraw(); });
-    }
-    function redraw() { $('#secs').innerHTML = secsHTML(); bindSecs(); autosize($('#secs')); }
-    bindSecs(); autosize(box);
-    $('#p-save').addEventListener('click', function () {
-      p.sections = p.sections.map(function (s) { return { title: s.title, items: s.items.filter(function (it) { return it.text.trim(); }) }; }).filter(function (s) { return s.items.length; });
-      if (!p.sections.length) return say('Ajoute au moins un changement.', true);
-      if (!p.slug) p.slug = slug(p.version + '-' + p.title);
-      D.patches.sort(cmpPatch);
-      writeJSON('data/patches.json', D.patches, 'Patch v' + p.version + ' : ' + p.title).then(function () { D.patches.sort(cmpPatch); editPatch(D.patches.indexOf(p)); }, function () {});
+    window.VTG.page.patch(p, box, {
+      save: function () {
+        p.highlights = (p.highlights || []).map(function (h) { return String(h).trim(); }).filter(Boolean);
+        p.sections = p.sections.map(function (s) { var o = { title: s.title, items: s.items.filter(function (it) { return String(it.text).trim(); }) }; if (s.image) o.image = s.image; return o; }).filter(function (s) { return s.items.length; });
+        if (!p.sections.length) return say('Ajoute au moins un changement.', true);
+        if (!p.slug) p.slug = slug(p.version + '-' + p.title);
+        D.patches.sort(cmpPatch);
+        writeJSON('data/patches.json', D.patches, (p.draft ? 'Brouillon patch v' : 'Patch v') + p.version + ' : ' + p.title).then(function () { D.patches.sort(cmpPatch); editPatch(D.patches.indexOf(p)); }, function () {});
+      },
+      del: function () {
+        if (!confirm('Supprimer le patch v' + p.version + ' du site ?')) return;
+        D.patches.splice(i, 1); curPatch = -1; box.innerHTML = '<div class="empty">Patch supprimé.</div>';
+        writeJSON('data/patches.json', D.patches, 'Suppression patch v' + p.version).then(renderPatchList, function () {});
+      }
     });
-    $('#p-disc').addEventListener('click', function () {
-      if (!p.slug) return say('Enregistre d’abord le patch sur le site.', true);
-      window.VTG.compose({ kind: 'patch', ref: p });
-    });
-    $('#p-del').addEventListener('click', function () {
-      if (!confirm('Supprimer le patch v' + p.version + ' du site ?')) return;
-      D.patches.splice(i, 1); curPatch = -1; box.innerHTML = '<div class="empty">Patch supprimé.</div>';
-      writeJSON('data/patches.json', D.patches, 'Suppression patch v' + p.version).then(renderPatchList, function () {});
-    });
+    draftToggle(p, box);
   }
+
 
   // ------------------------------------------------------------------ ROADMAP
   function renderRoad() {
-    var r = D.roadmap; $('#road-note').value = r.note || '';
-    var b = $('#road-board');
-    b.innerHTML = r.columns.map(function (c, ci) {
-      return '<div class="ab-col"><h3>' + esc(c.title) + '<span>' + c.items.length + '</span></h3>' +
-        c.items.map(function (it, ii) {
-          return '<div class="ab-it"><input value="' + esc(it.title) + '" data-f="title" data-c="' + ci + '" data-i="' + ii + '" placeholder="Titre">' +
-            '<textarea rows="2" data-f="text" data-c="' + ci + '" data-i="' + ii + '" placeholder="Description">' + esc(it.text) + '</textarea>' +
-            '<input value="' + esc(it.tag) + '" data-f="tag" data-c="' + ci + '" data-i="' + ii + '" placeholder="Étiquette (Saison 2, 1.6.0…)">' +
-            '<div class="ab-tools"><button data-mv="' + ci + ':' + ii + ':-1" title="Colonne précédente">◀</button><button data-up="' + ci + ':' + ii + '" title="Monter">▲</button><button data-dn="' + ci + ':' + ii + '" title="Descendre">▼</button><button data-mv="' + ci + ':' + ii + ':1" title="Colonne suivante">▶</button><button data-rm="' + ci + ':' + ii + '" title="Supprimer">✕</button></div></div>';
-        }).join('') + '<button class="btn btn-ghost sm" data-add="' + ci + '">+ Ajouter</button></div>';
-    }).join('');
-    autosize(b);
-    $$('[data-f]', b).forEach(function (el) { el.addEventListener('input', function () { r.columns[el.dataset.c].items[el.dataset.i][el.dataset.f] = el.value; }); });
-    $$('[data-add]', b).forEach(function (el) { el.addEventListener('click', function () { r.columns[+el.dataset.add].items.push({ title: '', text: '', tag: '' }); renderRoad(); }); });
-    $$('[data-rm]', b).forEach(function (el) { el.addEventListener('click', function () { var a = el.dataset.rm.split(':').map(Number); r.columns[a[0]].items.splice(a[1], 1); renderRoad(); }); });
-    $$('[data-up],[data-dn]', b).forEach(function (el) { el.addEventListener('click', function () {
-      var a = (el.dataset.up || el.dataset.dn).split(':').map(Number), d = el.dataset.up ? -1 : 1, arr = r.columns[a[0]].items, j = a[1] + d;
-      if (j < 0 || j >= arr.length) return; var t = arr[a[1]]; arr[a[1]] = arr[j]; arr[j] = t; renderRoad();
-    }); });
-    $$('[data-mv]', b).forEach(function (el) { el.addEventListener('click', function () {
-      var a = el.dataset.mv.split(':').map(Number), to = a[0] + a[2]; if (to < 0 || to >= r.columns.length) return;
-      var it = r.columns[a[0]].items.splice(a[1], 1)[0]; r.columns[to].items.unshift(it); renderRoad();
-    }); });
+    window.VTG.page.road(D.roadmap, $('#road-board'), saveRoad);
   }
-  $('#road-note').addEventListener('input', function (e) { if (D.roadmap) D.roadmap.note = e.target.value; });
-  $('#road-save').addEventListener('click', function () {
+  function saveRoad() {
     if (!D.roadmap) return say('Connecte-toi d’abord.', true);
-    D.roadmap.columns.forEach(function (c) { c.items = c.items.filter(function (it) { return it.title.trim(); }); });
+    D.roadmap.columns.forEach(function (c) { c.items = c.items.filter(function (it) { return String(it.title || '').trim(); }); });
     writeJSON('data/roadmap.json', D.roadmap, 'Roadmap').then(renderRoad, function () {});
-  });
+  }
+
 
   // ------------------------------------------------------------------ SITE
   function renderSite() {
@@ -347,7 +281,241 @@
     writeJSON('data/site.json', s, 'Réglages du site (' + s.status.mode + ')').catch(function () {});
   });
 
-  // shared with the Discord composer (assets/discord.js)
+
+  // ------------------------------------------------------------------ drafts
+  // draft:true keeps an item in data/*.json but build.py leaves it off the public site
+  function draftToggle(o, box) {
+    var b = $('.pe-bar', box); if (!b) return;
+    var l = document.createElement('label'); l.className = 'chk drafttg';
+    l.innerHTML = '<input type="checkbox"' + (o.draft ? ' checked' : '') + '><span><b>Brouillon</b> — enregistré sur GitHub mais caché du site public. Décoche puis « Enregistrer et publier » pour le mettre en ligne.</span>';
+    $('input', l).addEventListener('change', function (e) { if (e.target.checked) o.draft = true; else delete o.draft; renderNewsList(); renderPatchList(); });
+    b.insertBefore(l, b.firstChild);
+  }
+
+  // ------------------------------------------------------------------ DASHBOARD
+  var DF = 'all';
+  function fmtN(n) { return n == null ? '—' : Number(n).toLocaleString('fr-FR'); }
+  function shortD(d) { var a = String(d || '').split('-'); return a.length === 3 ? a[2] + '.' + a[1] : esc(d); }
+  function renderDash() {
+    var dd = $('#dash-date'); if (!dd) return;
+    dd.textContent = new Date().toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+    $('#repo-name').textContent = KEY.repo;
+    var rows = [];
+    D.news.forEach(function (n, i) { rows.push({ k: 'news', i: i, type: 'Annonce', title: n.title, draft: !!n.draft, disc: !!n.discord_message, date: n.date }); });
+    D.patches.forEach(function (p, i) { rows.push({ k: 'patch', i: i, type: 'Patch', title: 'v' + p.version + ' · ' + p.title, draft: !!p.draft, disc: !!p.discord_message, date: p.date }); });
+    rows.sort(function (a, b) { return a.draft !== b.draft ? (a.draft ? -1 : 1) : (a.date < b.date ? 1 : a.date > b.date ? -1 : 0); });
+    $('#df-n').textContent = rows.filter(function (r) { return r.draft; }).length;
+    var q = ($('#d-search').value || '').toLowerCase();
+    var list = rows.filter(function (r) { return (DF === 'all' || (DF === 'draft') === r.draft) && (!q || r.title.toLowerCase().indexOf(q) >= 0); });
+    $('#d-rows').innerHTML = list.map(function (r) {
+      return '<button class="drow' + (r.draft ? ' isdraft' : '') + '" data-k="' + r.k + '" data-i="' + r.i + '"><span class="pill">' + r.type + '</span><span class="dt">' + esc(r.title) + '</span>' +
+        '<span class="pill ' + (r.draft ? 'p-draft' : 'p-live') + '">' + (r.draft ? 'Brouillon' : 'Publié') + '</span>' +
+        '<span class="dd ' + (r.disc ? 'd-ok' : '') + '">' + (r.disc ? '✓ envoyé' : '—') + '</span><span class="dd">' + shortD(r.date) + '</span></button>';
+    }).join('') || '<div class="empty">' + (D.site ? 'Rien ici.' : 'Connecte-toi pour voir tes contenus.') + '</div>';
+    $$('.drow[data-k]', $('#d-rows')).forEach(function (b) { b.addEventListener('click', function () {
+      if (b.dataset.k === 'news') { openTab('news'); editNews(+b.dataset.i); } else { openTab('patches'); editPatch(+b.dataset.i); }
+    }); });
+    var st = (D.site && D.site.status) || { mode: 'online' };
+    var lab = { online: 'En ligne', degraded: 'Perturbations', maintenance: 'Maintenance' };
+    $('#kp-mode').textContent = D.site ? (lab[st.mode] || st.mode) : '—';
+    $('#kp-mode').className = 'm-' + st.mode;
+    $('#kp-toggle').textContent = st.mode === 'maintenance' ? 'Repasser en ligne' : 'Activer la maintenance';
+  }
+  $$('.dfilt button').forEach(function (b) { b.addEventListener('click', function () { DF = b.dataset.df; $$('.dfilt button').forEach(function (x) { x.classList.toggle('on', x === b); }); renderDash(); }); });
+  $('#d-search').addEventListener('input', renderDash);
+  $('#kp-toggle').addEventListener('click', function () {
+    if (!D.site) return say('Connecte-toi d’abord.', true);
+    if ((D.site.status || {}).mode === 'maintenance') runCmd('/enligne'); else runCmd('/maintenance');
+  });
+  function loadStats() {
+    fetch('../status.json?t=' + Date.now(), { cache: 'no-store' }).then(function (r) { return r.json(); }).then(function (s) {
+      if (!s || !s.ok) { $('#kp-age').textContent = 'pas encore relevé'; return; }
+      $('#kp-playing').textContent = fmtN(s.playing); $('#kp-servers').textContent = fmtN((s.servers || []).length); $('#kp-visits').textContent = fmtN(s.visits);
+      $('#kp-fav').textContent = fmtN(s.favorites) + ' favoris';
+      if (s.fetched_at) $('#kp-age').textContent = 'relevé il y a ' + Math.max(0, Math.round((Date.now() / 1000 - s.fetched_at) / 60)) + ' min';
+    }).catch(function () { $('#kp-age').textContent = 'indisponible'; });
+  }
+  function loadLog() {
+    if (!KEY.gh) return;
+    gh('/commits?per_page=8&sha=' + BRANCH).then(function (list) {
+      $('#d-log').innerHTML = list.map(function (c) {
+        var d = new Date(c.commit.author.date), diff = (Date.now() - d) / 60000;
+        var when = diff < 60 ? Math.round(diff) + ' min' : diff < 1440 ? Math.round(diff / 60) + ' h' : d.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' });
+        return '<div class="lrow"><span>' + when + '</span><span>' + esc(c.commit.message.split('\n')[0]) + '</span></div>';
+      }).join('') || '<div class="empty">Aucun commit.</div>';
+    }).catch(function () { $('#d-log').innerHTML = '<div class="empty">Historique indisponible.</div>'; });
+  }
+
+  // ------------------------------------------------------------------ COMMAND BAR
+  // One line  : /annonce Titre #Tag            -> draft + editor
+  // Full block (Shift+Entrée for new lines)    -> everything filled in one go, see TPL below
+  var TPL = {
+    annonce: '/annonce Double XP ce week-end #Événement !épingler\nimage: crimson\ngalerie: spectre, loadout\nlien: \n---\nTout le week-end, l’XP est doublée sur tous les modes.\nRendez-vous vendredi 18 h !\n!publier !discord',
+    patch: '/patch 1.8.0 Nouvelle carte\nimage: spectre\nrésumé: Une nouvelle carte, des armes rééquilibrées et des corrections.\n* Nouvelle carte : Nordhaven\n* Recul du VX-9 réduit\n## Nouveautés\n+ Nouvelle carte Nordhaven avec 6 zones\n## Équilibrage\n= VX-9 : recul vertical réduit de 10 %\n## Corrections\n! Correction du crash au largage\n~ Chargement des textures plus rapide\n!publier !discord',
+    roadmap: '/roadmap prévu Mode classé\ntexte: Rangs, saisons classées et récompenses de fin de saison.\ntag: Saison 2\nimage: \n!publier'
+  };
+  var CMDS = [
+    { c: '/annonce', a: 'Titre #Tag', d: 'Brouillon d’annonce (une ligne) ou annonce complète (bloc)' },
+    { c: '/patch', a: '1.8.0 Titre', d: 'Brouillon de patch ou patch complet avec sections' },
+    { c: '/roadmap', a: 'prévu Titre', d: 'Carte : sorti, encours, prévu ou idée' },
+    { c: '/modele', a: 'annonce | patch | roadmap', d: 'Insère un bloc complet à remplir' },
+    { c: '/maintenance', a: 'Message', d: 'Bandeau maintenance sur le site' },
+    { c: '/enligne', a: '', d: 'Retire le bandeau' },
+    { c: '/aide', a: '', d: 'Syntaxe complète' }
+  ];
+  var cin = $('#cmd-in'), pop = $('#cmd-pop'), sel = 0, shownCmds = [];
+  function grow() { cin.style.height = 'auto'; cin.style.height = Math.min(cin.scrollHeight, 420) + 'px'; $('#cmd').classList.toggle('multi', cin.value.indexOf('\n') >= 0); }
+  function drawPop() {
+    var v = cin.value.trim(), head = v.split(/\s+/)[0].toLowerCase();
+    shownCmds = v.indexOf('\n') >= 0 ? [] : CMDS.filter(function (x) { return !v || x.c.indexOf(head) === 0 || head.indexOf(x.c) === 0; });
+    if (!shownCmds.length || document.activeElement !== cin) { pop.hidden = true; return; }
+    sel = Math.min(sel, shownCmds.length - 1);
+    pop.innerHTML = shownCmds.map(function (x, i) { return '<button type="button" role="option" class="' + (i === sel ? 'on' : '') + '" data-c="' + x.c + '"><b>' + x.c + '</b><em>' + esc(x.a) + '</em><span>' + esc(x.d) + '</span></button>'; }).join('') +
+      '<div class="cmd-tpl">Modèle complet : <button type="button" data-t="annonce">Annonce</button><button type="button" data-t="patch">Patch</button><button type="button" data-t="roadmap">Roadmap</button><small>Shift+Entrée = nouvelle ligne · Entrée = créer</small></div>';
+    pop.hidden = false;
+    $$('button[data-c]', pop).forEach(function (b) { b.addEventListener('mousedown', function (e) { e.preventDefault(); cin.value = b.dataset.c + ' '; sel = 0; grow(); drawPop(); cin.focus(); }); });
+    $$('button[data-t]', pop).forEach(function (b) { b.addEventListener('mousedown', function (e) { e.preventDefault(); useTpl(b.dataset.t); }); });
+  }
+  function useTpl(t) { cin.value = TPL[t]; grow(); pop.hidden = true; cin.focus(); cin.setSelectionRange(cin.value.indexOf(' ') + 1, cin.value.indexOf('\n')); }
+  cin.addEventListener('input', function () { sel = 0; grow(); drawPop(); });
+  cin.addEventListener('focus', drawPop);
+  cin.addEventListener('blur', function () { setTimeout(function () { pop.hidden = true; }, 120); });
+  cin.addEventListener('keydown', function (e) {
+    var multi = cin.value.indexOf('\n') >= 0;
+    if (!multi && (e.key === 'ArrowDown' || e.key === 'ArrowUp') && shownCmds.length) { e.preventDefault(); sel = (sel + (e.key === 'ArrowDown' ? 1 : -1) + shownCmds.length) % shownCmds.length; drawPop(); }
+    else if (!multi && e.key === 'Tab' && shownCmds[sel]) { e.preventDefault(); var parts = cin.value.trim().split(/\s+/); if (!parts[0] || shownCmds[sel].c.indexOf(parts[0].toLowerCase()) === 0) { cin.value = shownCmds[sel].c + ' ' + parts.slice(1).join(' '); grow(); drawPop(); } }
+    else if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); var v = cin.value.trim(); if (!v) return;
+      if (v.charAt(0) !== '/') v = '/annonce ' + v;
+      var head = v.split(/\s+/)[0].toLowerCase();
+      if (!multi && !CMDS.some(function (x) { return x.c === head; }) && shownCmds[sel]) v = shownCmds[sel].c + v.slice(head.length);
+      Promise.resolve(runCmd(v)).then(function (r) { if (r !== false) { cin.value = ''; grow(); pop.hidden = true; cin.blur(); } }); }
+    else if (e.key === 'Escape') { if (!multi) cin.value = ''; grow(); cin.blur(); }
+  });
+  document.addEventListener('keydown', function (e) { if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); cin.focus(); cin.select(); } });
+  $$('[data-cmd]').forEach(function (b) { b.addEventListener('click', function () { var t = b.dataset.cmd.replace(/^\/|\s+$/g, ''); if (TPL[t]) useTpl(t); else { cin.value = b.dataset.cmd; cin.focus(); drawPop(); } }); });
+
+  var COLS = { done: ['sorti', 'sortie', 'done', 'fait'], progress: ['encours', 'en-cours', 'cours', 'dev', 'developpement', 'progress'], planned: ['prevu', 'planned', 'bientot', 'prochain'], ideas: ['idee', 'idees', 'etude', 'ideas'] };
+  var KEYS = ['tag', 'categorie', 'image', 'header', 'banniere', 'carte', 'card', 'galerie', 'gallery', 'lien', 'date', 'texte', 'resume', 'summary', 'version', 'titre', 'colonne'];
+  var ITEM = { '+': 'new', '^': 'update', '=': 'balance', '!': 'fix', '~': 'perf', '-': 'new' };
+  function plain(s) { return String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); }
+
+  // parse a full block: header line, "clé: valeur" lines, flags (!publier !discord !épingler), ## sections, item lines, * highlights, free text
+  function parseBlock(v) {
+    var lines = v.replace(/\r/g, '').split('\n'), first = lines.shift(), o = { kv: {}, text: [], secs: [], hl: [], flags: {} };
+    function flags(str) { return str.replace(/(^|\s)!(publier|discord|[eé]pingl[eé]r?)(?=\s|$)/gi, function (_, sp, f) { var pf = plain(f); o.flags[pf === 'publier' ? 'publier' : pf === 'discord' ? 'discord' : 'pin'] = true; return sp; }); }
+    first = flags(first);
+    var m = first.match(/^\/(\S+)\s*(.*)$/); o.cmd = m ? plain(m[1]) : ''; o.head = m ? m[2].trim() : first;
+    var inBody = false, cur = null;
+    lines.forEach(function (raw) {
+      var l = flags(raw).replace(/\s+$/, ''); if (!l.trim()) { if (inBody) o.text.push(''); return; }
+      if (/^-{3,}$/.test(l.trim())) { inBody = true; return; }
+      var sm = l.match(/^#{2,3}\s*(.+)$/); if (sm) { cur = { title: sm[1].trim(), items: [] }; o.secs.push(cur); return; }
+      var im = l.match(/^\s*([+^=!~-])\s+(.+)$/); if (im && (o.cmd === 'patch' || cur)) { if (!cur) { cur = { title: 'Nouveautés', items: [] }; o.secs.push(cur); } cur.items.push({ tag: ITEM[im[1]], text: im[2].trim() }); return; }
+      var hm = l.match(/^\s*\*\s+(.+)$/); if (hm) { o.hl.push(hm[1].trim()); return; }
+      var km = !inBody && l.match(/^\s*([a-zA-Zéèêàçû_-]{2,20})\s*:\s*(.*)$/); if (km && KEYS.indexOf(plain(km[1])) >= 0) { o.kv[plain(km[1]).replace(/\s+/g, '')] = km[2].trim(); return; }
+      o.text.push(l.trim());
+    });
+    o.body = o.text.join('\n').replace(/\n{3,}/g, '\n\n').trim();
+    return o;
+  }
+  // image terms: "assets/…" path, a word found in the library file names, or "ia <description>"
+  var LIB = null;
+  function library() { if (LIB) return Promise.resolve(LIB); return Promise.all([gh('/contents/assets/img?ref=' + BRANCH).catch(function () { return []; }), gh('/contents/assets/img/uploads?ref=' + BRANCH).catch(function () { return []; })]).then(function (r) { LIB = r[1].concat(r[0]).filter(function (f) { return f.type === 'file' && /\.(jpe?g|png|webp)$/i.test(f.name); }).map(function (f) { return f.path; }); return LIB; }); }
+  function genAI(desc, style) {
+    if (!KEY.ai) return Promise.reject(new Error('clé OpenAI absente (onglet Connexion)'));
+    say('Génération de l’image IA… (20 à 60 s)');
+    return fetch('https://api.openai.com/v1/images/generations', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + KEY.ai },
+      body: JSON.stringify({ model: 'gpt-image-1', prompt: (STYLES[style] || '') + desc, size: '1536x1024', quality: 'medium', n: 1 }) })
+      .then(function (r) { return r.json().then(function (j) { if (!r.ok) throw new Error((j.error && j.error.message) || ('HTTP ' + r.status)); return j; }); })
+      .then(function (j) { return toJpegB64('data:image/png;base64,' + j.data[0].b64_json); }).then(function (b) { return uploadB64(b, 'ia-' + desc.slice(0, 30)); });
+  }
+  function resolveImg(term, style, miss) {
+    term = String(term || '').trim(); if (!term) return Promise.resolve('');
+    if (/^assets\//.test(term)) return Promise.resolve(term);
+    var ai = term.match(/^ia\s*[:\-]?\s+(.+)$/i); if (ai) return genAI(ai[1], style).catch(function (e) { miss.push('IA : ' + e.message); return ''; });
+    return library().then(function (lib) { var k = slug(term), hit = lib.filter(function (p) { return slug(p.split('/').pop()).indexOf(k) >= 0; })[0]; if (!hit) miss.push('« ' + term + ' » introuvable dans la médiathèque'); return hit || ''; });
+  }
+  function finish(miss, what) { say(what + (miss.length ? ' — ' + miss.join(' · ') : ''), !!miss.length); }
+
+  function runCmd(v) {
+    var o = parseBlock(v), cmd = o.cmd, rest = o.head, kv = o.kv, miss = [];
+    if (cmd === 'aide' || cmd === 'help') { cin.value = ''; cin.focus(); sel = 0; drawPop(); return false; }
+    if (cmd === 'modele' || cmd === 'template') { var t = plain(rest).split(/\s+/)[0]; t = t === 'news' ? 'annonce' : t === 'road' ? 'roadmap' : t; if (!TPL[t]) { say('Modèle : annonce, patch ou roadmap.', true); return false; } useTpl(t); return false; }
+    if (!D.site) { say('Connecte-toi d’abord (onglet Connexion).', true); return false; }
+    var full = v.indexOf('\n') >= 0 || Object.keys(o.flags).length > 0;
+
+    if (cmd === 'annonce' || cmd === 'news') {
+      var tag = kv.tag || kv.categorie || 'Annonce';
+      rest = rest.replace(/#(\S+)/, function (_, t2) { tag = t2.replace(/[-_]/g, ' '); return ''; }).trim();
+      tag = tag.charAt(0).toUpperCase() + tag.slice(1);
+      var n = { id: '', title: rest || 'Nouvelle annonce', date: kv.date || today(), tag: tag, pinned: !!o.flags.pin, text: kv.texte || o.body || '', image: D.site.default_image, link: kv.lien || '', discord_message: '', draft: true };
+      if (!full) { D.news.unshift(n); openTab('news'); editNews(0); say('Brouillon d’annonce créé : remplis-le puis enregistre.'); return; }
+      setSync('Préparation…', 'busy');
+      var gal = (kv.galerie || kv.gallery || '').split(',').map(function (x) { return x.trim(); }).filter(Boolean).slice(0, 6);
+      return Promise.all([resolveImg(kv.image || kv.header || kv.banniere, 'event', miss), resolveImg(kv.carte || kv.card, 'event', miss)].concat(gal.map(function (g) { return resolveImg(g, 'event', miss); }))).then(function (r) {
+        if (r[0]) n.image = r[0]; if (r[1]) n.card_image = r[1];
+        var g2 = r.slice(2).filter(Boolean); if (g2.length) n.gallery = g2;
+        n.id = slug(n.title); if (D.news.some(function (x) { return x.id === n.id; })) n.id += '-' + Date.now().toString(36);
+        if (n.pinned) D.news.forEach(function (x) { x.pinned = false; });
+        if (o.flags.publier) delete n.draft;
+        D.news.unshift(n); openTab('news'); editNews(0);
+        if (!o.flags.publier) { setSync('Connecté', 'ok'); finish(miss, 'Annonce prête en brouillon : relis-la puis « Enregistrer et publier ».'); return; }
+        return writeJSON('data/news.json', D.news, 'Annonce : ' + n.title).then(function () {
+          renderNewsList(); finish(miss, 'Annonce publiée sur le site.');
+          if (o.flags.discord) window.VTG.page.publish('news', n);
+        });
+      }).catch(function () { return false; });
+    }
+
+    if (cmd === 'patch') {
+      var parts = rest.split(/\s+/).filter(Boolean), ver = kv.version || '';
+      if (/^v?\d+(\.\d+){0,3}$/i.test(parts[0] || '')) ver = parts.shift();
+      ver = ver.replace(/^v/i, '');
+      if (!ver) { var last = D.patches.filter(function (x) { return !x.draft; })[0] || D.patches[0]; var vv = last ? String(last.version).split('.').map(Number) : [1, 0, -1]; while (vv.length < 3) vv.push(0); vv[2] += 1; ver = vv.join('.'); }
+      if (D.patches.some(function (x) { return x.version === ver; })) { say('La version ' + ver + ' existe déjà.', true); return false; }
+      var np = { slug: '', version: ver, title: parts.join(' ') || kv.titre || 'Nouveau patch', date: kv.date || today(), image: D.site.default_image, summary: kv.resume || kv.summary || o.body || '', discord_message: '', draft: true, highlights: o.hl,
+        sections: o.secs.length ? o.secs.filter(function (x) { return x.items.length; }) : [{ title: 'Nouveautés', items: [{ tag: 'new', text: '' }] }, { title: 'Équilibrage', items: [{ tag: 'balance', text: '' }] }, { title: 'Corrections', items: [{ tag: 'fix', text: '' }] }] };
+      if (!full) { D.patches.push(np); D.patches.sort(cmpPatch); openTab('patches'); editPatch(D.patches.indexOf(np)); say('Brouillon de patch v' + ver + ' créé.'); return; }
+      if (!np.sections.length) { say('Ajoute au moins une ligne de changement (+ nouveauté, ! correction…).', true); return false; }
+      setSync('Préparation…', 'busy');
+      return Promise.all([resolveImg(kv.image || kv.header || kv.banniere, 'patch', miss), resolveImg(kv.carte || kv.card, 'patch', miss)]).then(function (r) {
+        if (r[0]) np.image = r[0]; if (r[1]) np.card_image = r[1];
+        np.slug = slug(np.version + '-' + np.title);
+        if (o.flags.publier) delete np.draft;
+        D.patches.push(np); D.patches.sort(cmpPatch); openTab('patches'); editPatch(D.patches.indexOf(np));
+        if (!o.flags.publier) { setSync('Connecté', 'ok'); finish(miss, 'Patch v' + ver + ' prêt en brouillon : relis-le puis « Enregistrer et publier ».'); return; }
+        return writeJSON('data/patches.json', D.patches, 'Patch v' + np.version + ' : ' + np.title).then(function () {
+          renderPatchList(); finish(miss, 'Patch v' + ver + ' publié sur le site.');
+          if (o.flags.discord) window.VTG.page.publish('patch', np);
+        });
+      }).catch(function () { return false; });
+    }
+
+    if (cmd === 'roadmap' || cmd === 'road') {
+      var w = rest.split(/\s+/).filter(Boolean), col = 'planned', key = plain(kv.colonne || w[0] || '');
+      Object.keys(COLS).forEach(function (k) { if (COLS[k].indexOf(key) >= 0) { col = k; if (!kv.colonne) w.shift(); } });
+      var c = D.roadmap.columns.filter(function (x) { return x.id === col; })[0] || D.roadmap.columns[0];
+      var it = { title: w.join(' ') || 'Nouvel objectif', text: kv.texte || o.body || '', tag: kv.tag || '' };
+      return resolveImg(kv.image, 'roadmap', miss).then(function (img) {
+        if (img) it.image = img;
+        c.items.unshift(it); openTab('roadmap'); renderRoad();
+        if (o.flags.publier) return writeJSON('data/roadmap.json', D.roadmap, 'Roadmap : ' + it.title).then(function () { renderRoad(); finish(miss, 'Carte « ' + it.title + ' » publiée dans « ' + c.title + ' ».'); });
+        finish(miss, 'Carte ajoutée dans « ' + c.title + ' ». Clique Enregistrer et publier pour la mettre en ligne.');
+      }).catch(function () { return false; });
+    }
+
+    if (cmd === 'maintenance' || cmd === 'enligne' || cmd === 'online') {
+      var on = cmd === 'maintenance';
+      D.site.status = { mode: on ? 'maintenance' : 'online', message: on ? (rest || 'Maintenance en cours, retour très vite.') : '' };
+      renderSite(); renderDash();
+      writeJSON('data/site.json', D.site, on ? 'Maintenance : ' + D.site.status.message : 'Statut : en ligne').catch(function () {});
+      return;
+    }
+    say('Commande inconnue. Tape /aide.', true); return false;
+  }
+  loadStats();
+
+  // shared with the page editor (assets/pageedit.js)
   window.VTG = { $: $, $$: $$, esc: esc, say: say, KEY: KEY, D: D, pickImage: pickImage, rawURL: rawURL, siteURL: siteURL, openTab: openTab,
     saveNews: function (msg) { return writeJSON('data/news.json', D.news, msg); }, savePatches: function (msg) { return writeJSON('data/patches.json', D.patches, msg); } };
   loadAll();

@@ -125,3 +125,24 @@
   }
   if (document.querySelector('[data-stat]')) { refresh(); setInterval(refresh, 60000); }
 })();
+
+// ---------------------------------------------------------------- patch notes index : filter, search, load more
+(function () {
+  var grid = document.querySelector('[data-pgrid]'); if (!grid) return;
+  var cards = Array.prototype.slice.call(grid.querySelectorAll('.pc2'));
+  var feat = document.querySelector('.pfeat'), more = document.querySelector('[data-pmore]'), empty = document.querySelector('.pempty');
+  var input = document.querySelector('.psearch input'), cat = '', q = '', shown = 6;
+  function match(el) { return (!cat || (el.dataset.cats || '').split('|').indexOf(cat) >= 0) && (!q || (el.dataset.q || '').indexOf(q) >= 0); }
+  function apply() {
+    var n = 0, total = 0;
+    cards.forEach(function (c) { var ok = match(c); if (ok) total++; c.hidden = !ok || ++n > shown; if (!ok) n = n; });
+    var fok = feat ? match(feat) : false; if (feat) feat.hidden = !fok;
+    if (more) more.hidden = total <= shown;
+    if (empty) empty.hidden = total > 0 || fok;
+  }
+  document.querySelectorAll('.pchip').forEach(function (b) { b.addEventListener('click', function () {
+    document.querySelectorAll('.pchip').forEach(function (x) { x.classList.toggle('on', x === b); }); cat = b.dataset.cat; shown = 6; apply(); }); });
+  if (input) input.addEventListener('input', function () { q = input.value.trim().toLowerCase(); shown = 6; apply(); });
+  if (more) more.addEventListener('click', function () { shown += 6; apply(); });
+  apply();
+})();
