@@ -1,5 +1,129 @@
 [
   {
+    "slug": "1-7-0-lames-et-prestige",
+    "version": "1.7.0",
+    "title": "Lames, Prestige et performances",
+    "date": "2026-11-16",
+    "image": "assets/img/vx9-spectre-ingame.jpg",
+    "summary": "Armes plus détaillées avec leur fiche de stats, grosse passe de performances (fini les chutes à 90 FPS), portail de réintégration en mode zombie, couteaux avec leurs camos et système de Prestige avec récompenses.",
+    "discord_message": "",
+    "highlights": [
+      "Armes plus détaillées + fiche de stats",
+      "FPS bien plus stables",
+      "Portail de réintégration (zombies)",
+      "3 couteaux avec camos",
+      "Prestige 1 à 10 + Maître Prestige"
+    ],
+    "sections": [
+      {
+        "title": "Armes",
+        "items": [
+          {
+            "tag": "new",
+            "text": "Modèles d'armes beaucoup plus détaillés : vis, rails, marquages, sélecteurs de tir, chargeurs et organes de visée refaits."
+          },
+          {
+            "tag": "new",
+            "text": "Fiche de stats pour chaque arme dans le menu : dégâts, cadence, précision, portée, contrôle du recul, mobilité et maniabilité."
+          },
+          {
+            "tag": "update",
+            "text": "Les accessoires équipés et le camo sont rappelés directement sur la carte de l'arme."
+          }
+        ]
+      },
+      {
+        "title": "Performances",
+        "items": [
+          {
+            "tag": "perf",
+            "text": "Avant, sur une config qui tournait à 200 FPS, le jeu pouvait tomber à 100, voire 90 FPS en pleine partie. Sur la même machine, on reste maintenant stable autour de 140 FPS."
+          },
+          {
+            "tag": "perf",
+            "text": "Physique des opérateurs allégée : leur équipement est regroupé, ce qui divise presque par deux le temps de calcul."
+          },
+          {
+            "tag": "perf",
+            "text": "Cartes optimisées : vitres, ombres, collisions et lumières lointaines coupées quand elles ne servent pas."
+          },
+          {
+            "tag": "perf",
+            "text": "Les textes de l'interface ne sont plus recalculés en boucle."
+          },
+          {
+            "tag": "update",
+            "text": "Les FPS dépendent de ton ordinateur : les chiffres ci-dessus viennent de notre machine de test. Chacun devrait sentir une partie plus fluide, mais pas forcément les mêmes valeurs."
+          }
+        ]
+      },
+      {
+        "title": "Mode zombie",
+        "items": [
+          {
+            "tag": "new",
+            "text": "Portail de réintégration : une nouvelle machine en forme d'atome. Pour 10 000 $, elle ramène un coéquipier tombé directement dans la partie."
+          },
+          {
+            "tag": "update",
+            "text": "Le portail s'ajoute aux machines d'atouts, à la Forge d'armes, à la caisse mystère et à l'établi."
+          }
+        ]
+      },
+      {
+        "title": "Couteaux",
+        "items": [
+          {
+            "tag": "new",
+            "text": "Système de couteaux : un emplacement de mêlée dans chaque classe, avec ses propres stats, éliminations et maîtrise."
+          },
+          {
+            "tag": "new",
+            "text": "Couteau de combat (équilibré), Talon (lame griffe très rapide, débloquée à 5 éliminations au couteau) et Brush Cleaver (lourd, longue portée, débloqué à 15)."
+          },
+          {
+            "tag": "new",
+            "text": "Camos inclus : chaque lame a ses propres défis de camos (éliminations et coups dans le dos) et sa maîtrise."
+          },
+          {
+            "tag": "update",
+            "text": "Les camos de la boutique, comme CRIMSON et le nouveau SPECTRE, fonctionnent aussi sur les couteaux."
+          }
+        ]
+      },
+      {
+        "title": "Prestige",
+        "items": [
+          {
+            "tag": "new",
+            "text": "Système de Prestige : arrivé au niveau 55, tu peux passer au prestige suivant (10 prestiges au total)."
+          },
+          {
+            "tag": "new",
+            "text": "À chaque prestige : un emblème unique, 400 crédits et un jeton de déblocage permanent pour l'arme de ton choix."
+          },
+          {
+            "tag": "new",
+            "text": "Maître Prestige : après le prestige 10, les niveaux montent jusqu'à 1000, avec une récompense tous les 100 niveaux."
+          },
+          {
+            "tag": "update",
+            "text": "Tu gardes tout : niveaux d'armes, camos, maîtrises, crédits, opérateurs et quêtes d'arsenal."
+          }
+        ]
+      },
+      {
+        "title": "Boutique",
+        "items": [
+          {
+            "tag": "new",
+            "text": "Nouveau camo SPECTRE (épique, 900 crédits) : corps presque noir et contours hexagonaux cyan qui défilent lentement."
+          }
+        ]
+      }
+    ]
+  },
+  {
     "slug": "1-6-0-arsenal-tactique",
     "version": "1.6.0",
     "title": "Arsenal tactique",
