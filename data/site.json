@@ -10,8 +10,8 @@
   "universe_id": 10750574018,
   "repo": "marwantabarki-spec/Vantage",
   "status": {
-    "mode": "maintenance",
-    "message": "Maintenance en cours, retour très vite."
+    "mode": "online",
+    "message": ""
   },
   "ticker": [
     "Mise à jour 1.7.0 disponible",
