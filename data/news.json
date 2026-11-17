@@ -4,7 +4,7 @@
     "title": "VANTAGE — PRE-RELEASE UPDATE 0.8.0 : commands for the admin command bar (Ctrl+K)",
     "date": "2026-11-17",
     "tag": "Annonce",
-    "pinned": true,
+    "pinned": false,
     "text": "BEFORE: upload the 3 images to the admin media library, without renaming them:\nvtg-pre-competition.jpg · vtg-pre-prestige.jpg · vtg-pre-weapon-prestige.jpg\nThe commands find each image by its name.\nPaste each block as a whole into the command bar, then press Enter.\nRemove \"!publier\" to keep it as a draft, and \"!discord\" if you do not want a Discord post.\n==================== 1) PATCH NOTES ====================\n/patch 0.8.0 Competitions & Prestige 2.0\n==================== 2) ANNOUNCEMENT (site home page) ====================\n/annonce Pre-release update: Competitions & Prestige 2.0 #Update\nA new pre-release update is live in testing!\nCompetitions: a brand new cup screen and cup selection. Pick a cup, follow your best matches and watch the leaderboard live.\nPrestige 2.0: every prestige gives an instant reward on entry, then 5 rewards up to level 50. Weapon Prestige is here too, with 4 camos to unlock.\nOperators have been rebuilt with real physics on capes and gear, and the Zombies HUD has been redone with your armor plates back on screen.\nVANTAGE is not released yet: your feedback shapes the launch. Full details are in the patch notes.\n\n==================== 3) (optional) ROADMAP ====================\n\n/roadmap sorti Competitions & Prestige 2.0\ntexte: New Competition screen, Prestige 2.0 with rewards and weapon prestige.\ntag: Pre-release\nimage: vtg-pre-competition",
     "image": "assets/img/loadout.jpg",
     "link": "https://marwantabarki-spec.github.io/Vantage/patch-notes/0-8-0-competitions-prestige-2-0/",
