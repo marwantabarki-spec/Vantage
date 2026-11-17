@@ -1,5 +1,156 @@
 [
   {
+    "slug": "0-10-0-competitions-prestige-2-0",
+    "version": "0.10.0",
+    "title": "Competitions & Prestige 2.0",
+    "date": "2026-11-17",
+    "image": "assets/img/uploads/img-3341-mwkf1tjl.jpg",
+    "summary": "A new pre-release. VANTAGE is not released yet, so everything here can still change before launch, and your feedback shapes it.",
+    "discord_message": "",
+    "draft": true,
+    "highlights": [
+      "New cup selection and cup screen",
+      "Prestige 2.0 with 5 rewards per prestige",
+      "Weapon Prestige with 4 camos",
+      "Rebuilt operators with physics",
+      "New Zombies HUD with armor plates"
+    ],
+    "sections": [
+      {
+        "title": "Competitions",
+        "items": [
+          {
+            "tag": "new",
+            "text": "Pick a cup from the new cup selection: each cup has its card with its mode, dates and status (live, upcoming, ended)."
+          },
+          {
+            "tag": "new",
+            "text": "Open a cup to see it on the 3D stage, with the qualifier, qualified and final phases and a live countdown."
+          },
+          {
+            "tag": "new",
+            "text": "Your rank with the details of your best matches (placement, placement points, eliminations)."
+          },
+          {
+            "tag": "new",
+            "text": "Live leaderboard with the top 20 qualifying line."
+          },
+          {
+            "tag": "new",
+            "text": "Switch cups with Q / E or the controller bumpers."
+          }
+        ],
+        "image": "assets/img/uploads/img-3337-mwkext07.jpg"
+      },
+      {
+        "title": "Prestige 2.0",
+        "items": [
+          {
+            "tag": "new",
+            "text": "New Prestige screen with 3 pages: Prestige, Rewards and Weapon Prestige."
+          },
+          {
+            "tag": "new",
+            "text": "Entering a prestige gives an instant reward and a permanent unlock token."
+          },
+          {
+            "tag": "new",
+            "text": "5 rewards on the way to level 50: a calling card, an emblem, a camo, 60 minutes of 2X XP and an operator."
+          },
+          {
+            "tag": "update",
+            "text": "Entering a prestige now requires holding the button, so nothing happens by mistake."
+          }
+        ],
+        "image": "assets/img/uploads/img-3338-mwkeyb7h.jpg"
+      },
+      {
+        "title": "Weapon Prestige",
+        "items": [
+          {
+            "tag": "new",
+            "text": "Take a weapon to level 20, then push it through P1, P2, P3 and Master."
+          },
+          {
+            "tag": "update",
+            "text": "Spending a permanent unlock token on a weapon is also a hold now."
+          }
+        ],
+        "image": "assets/img/uploads/img-3339-mwkeyn3a.jpg"
+      },
+      {
+        "title": "Zombies",
+        "items": [
+          {
+            "tag": "update",
+            "text": "A brand new HUD: wave, step-by-step objective, points, perks, armor and health."
+          },
+          {
+            "tag": "new",
+            "text": "Your armor plates are back on screen (count and key 4)."
+          },
+          {
+            "tag": "new",
+            "text": "When you are downed, a banner reminds you that you keep your pistol and that a teammate can revive you."
+          }
+        ],
+        "image": "assets/img/uploads/img-3340-mwkf35a6.jpg"
+      },
+      {
+        "title": "Interface",
+        "items": [
+          {
+            "tag": "new",
+            "text": "New game loading screen."
+          },
+          {
+            "tag": "update",
+            "text": "Grey weapon icons on the class cards, knife included."
+          },
+          {
+            "tag": "update",
+            "text": "Brighter Battle Pass: icons and rewards are easier to read."
+          }
+        ]
+      },
+      {
+        "title": "Fixes",
+        "items": [
+          {
+            "tag": "fix",
+            "text": "Weapon cards no longer darken when hovered."
+          },
+          {
+            "tag": "fix",
+            "text": "The Carbon Weave camo no longer causes an error on some weapons."
+          }
+        ]
+      }
+    ],
+    "card_image": "assets/img/uploads/034260a1-7a78-4e14-9812-2ec78201d0b2-mwkf9u9u.jpg"
+  },
+  {
+    "slug": "",
+    "version": "0.9.1",
+    "title": "Nouveau patch",
+    "date": "2026-11-17",
+    "image": "assets/img/loadout.jpg",
+    "summary": "",
+    "discord_message": "",
+    "highlights": [],
+    "sections": [
+      {
+        "title": "Nouveautés",
+        "items": [
+          {
+            "tag": "new",
+            "text": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
     "slug": "0-9-0-lames-prestige-et-performances",
     "version": "0.9.0",
     "title": "Lames, Prestige et Performances",
