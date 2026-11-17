@@ -129,27 +129,6 @@
     "card_image": "assets/img/uploads/034260a1-7a78-4e14-9812-2ec78201d0b2-mwkf9u9u.jpg"
   },
   {
-    "slug": "",
-    "version": "0.9.1",
-    "title": "Nouveau patch",
-    "date": "2026-11-17",
-    "image": "assets/img/loadout.jpg",
-    "summary": "",
-    "discord_message": "",
-    "highlights": [],
-    "sections": [
-      {
-        "title": "Nouveautés",
-        "items": [
-          {
-            "tag": "new",
-            "text": ""
-          }
-        ]
-      }
-    ]
-  },
-  {
     "slug": "0-9-0-lames-prestige-et-performances",
     "version": "0.9.0",
     "title": "Lames, Prestige et Performances",
